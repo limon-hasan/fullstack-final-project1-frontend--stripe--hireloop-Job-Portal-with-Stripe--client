@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 
 import globeImg from "@/app/images/globe.png"
-import { Button } from "@/components/ui/button"
+import { BrandButton } from "@/components/shared/brand-button"
 
 const trendingTags = [
   { label: "Product Designer", href: "/jobs?query=Product+Designer" },
@@ -134,14 +134,14 @@ export function Hero() {
             />
           </div>
 
-          <Button
+          <BrandButton
             type="submit"
             size="icon"
-            className="h-12 w-full shrink-0 rounded-xl bg-[#5b4df5] text-white shadow-[0_6px_24px_rgba(91,77,245,0.5)] hover:bg-[#6c5ff7] sm:size-14"
+            className="h-12 w-full shrink-0 px-0 shadow-[0_6px_24px_rgba(91,77,245,0.5)] sm:size-14"
             aria-label="Search jobs"
           >
             <Search className="size-[18px]" />
-          </Button>
+          </BrandButton>
         </form>
 
         {/* Trending Tags */}

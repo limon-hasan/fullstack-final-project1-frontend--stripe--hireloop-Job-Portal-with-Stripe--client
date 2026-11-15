@@ -1,6 +1,5 @@
 import Link from "next/link"
 import {
-  ChevronRight,
   Code2,
   Eye,
   Globe,
@@ -15,15 +14,14 @@ import {
   Users,
 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import type { JobPayload } from "./new/page"
-import { getJobs } from "@/lib/api/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { BrandButton } from "@/components/shared/brand-button"
+import { PageHeader } from "@/components/shared/page-header"
+import { getJobs } from "@/lib/api/jobs"
+import type { ManagedJob } from "@/types/jobs"
 
-export interface ManagedJob extends JobPayload {
-  _id: string
-  postedLabel: string
-}
+// Keep the old page-level type import path working.
+export type { ManagedJob } from "@/types/jobs"
 
 function getCategoryStyle(category: string) {
   switch (category) {
@@ -89,30 +87,22 @@ export default async function ManageJobsPage() {
 
   return (
     <div className="w-full space-y-6 pb-12 text-white">
-      {/* Breadcrumb & Page Header */}
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-zinc-400">
-            <span>Manage Jobs</span>
-            <ChevronRight className="h-3.5 w-3.5 text-zinc-600" />
-            <span className="text-[#7c73f8]">Job Listings & Postings</span>
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            Manage Job Posts
-          </h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Review live listings, monitor applicants, and update job details
-            across your organization.
-          </p>
-        </div>
-
-        <Link href="/dashboard/recruiter/jobs/new">
-          <Button className="h-11 shrink-0 rounded-xl bg-[#5b4df5] px-5 text-sm font-semibold text-white shadow-[0_8px_24px_-8px_rgba(91,77,245,0.85)] hover:bg-[#6c5ff7]">
-            <Plus className="mr-2 h-4 w-4" />
-            New Job Post
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Manage Jobs" },
+          { label: "Job Listings & Postings" },
+        ]}
+        title="Manage Job Posts"
+        description="Review live listings, monitor applicants, and update job details across your organization."
+        action={
+          <Link href="/dashboard/recruiter/jobs/new">
+            <BrandButton className="shrink-0 px-5">
+              <Plus className="mr-2 h-4 w-4" />
+              New Job Post
+            </BrandButton>
+          </Link>
+        }
+      />
 
       {/* Responsive Table Card */}
       <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-[#121318]">

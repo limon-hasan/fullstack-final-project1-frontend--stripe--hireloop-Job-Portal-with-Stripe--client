@@ -19,11 +19,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { cn } from "cn"
+import { BrandButton } from "@/components/shared/brand-button"
 import { authClient } from "@/lib/auth-client"
-
-const brandButtonClass =
-  "h-11 rounded-xl bg-[#5b4df5] px-6 text-[15px] font-semibold text-white shadow-[0_8px_24px_-8px_rgba(91,77,245,0.9)] hover:bg-[#6c5ff7] focus-visible:border-[#8b81ff] focus-visible:ring-[#5b4df5]/40"
 
 function Navbar() {
   const pathname = usePathname()
@@ -107,25 +104,22 @@ function Navbar() {
                 >
                   Sign In
                 </Link>
-                <Button
-                  nativeButton={false}
-                  render={<Link href="/sign-up" />}
-                  className={brandButtonClass}
-                >
-                  Get Started
-                </Button>
-              </div>
-              <div className="flex items-center gap-2 lg:hidden">
-                <Button
+                <BrandButton
                   nativeButton={false}
                   render={<Link href="/signup" />}
-                  className={cn(
-                    brandButtonClass,
-                    "hidden h-9 px-4 text-sm sm:inline-flex"
-                  )}
+                  className="text-[15px]"
                 >
                   Get Started
-                </Button>
+                </BrandButton>
+              </div>
+              <div className="flex items-center gap-2 lg:hidden">
+                <BrandButton
+                  nativeButton={false}
+                  render={<Link href="/signup" />}
+                  className="hidden h-9 px-4 text-sm sm:inline-flex"
+                >
+                  Get Started
+                </BrandButton>
 
                 <Sheet open={open} onOpenChange={setOpen}>
                   <SheetTrigger
@@ -189,28 +183,22 @@ function Navbar() {
                       <Button
                         nativeButton={false}
                         render={
-                          <Link
-                            href="/sign-in"
-                            onClick={() => setOpen(false)}
-                          />
+                          <Link href="/signin" onClick={() => setOpen(false)} />
                         }
                         variant="outline"
                         className="h-11 w-full rounded-xl border-white/15 bg-transparent text-[15px] font-medium text-[#5c87ff] hover:bg-white/5 hover:text-[#84a4ff]"
                       >
                         Sign In
                       </Button>
-                      <Button
+                      <BrandButton
                         nativeButton={false}
                         render={
-                          <Link
-                            href="/sign-up"
-                            onClick={() => setOpen(false)}
-                          />
+                          <Link href="/signup" onClick={() => setOpen(false)} />
                         }
-                        className={cn(brandButtonClass, "w-full")}
+                        className="w-full"
                       >
                         Get Started
-                      </Button>
+                      </BrandButton>
                     </SheetFooter>
                   </SheetContent>
                 </Sheet>

@@ -49,17 +49,19 @@ export function FormField({
 interface TextFieldProps extends React.ComponentProps<typeof Input> {
   label: React.ReactNode
   icon?: LucideIcon
-  prefix?: React.ReactNode
+  leading?: React.ReactNode
   hint?: React.ReactNode
   fieldClassName?: string
+  requiredMark?: boolean
 }
 
 export function TextField({
   label,
   icon: Icon,
-  prefix,
+  leading,
   hint,
   required,
+  requiredMark = required,
   className,
   fieldClassName,
   ...props
@@ -68,7 +70,7 @@ export function TextField({
     <FormField
       label={label}
       htmlFor={props.id}
-      required={required}
+      required={requiredMark}
       hint={hint}
       className={fieldClassName}
     >
@@ -76,13 +78,13 @@ export function TextField({
         {Icon && (
           <Icon className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-zinc-500" />
         )}
-        {prefix}
+        {leading}
         <Input
           required={required}
           className={cn(
             inputClassName,
             Icon && "pl-10",
-            prefix && "pl-8",
+            leading && "pl-8",
             className
           )}
           {...props}
@@ -97,6 +99,7 @@ interface SelectFieldProps extends React.ComponentProps<"select"> {
   options: readonly string[]
   hint?: React.ReactNode
   fieldClassName?: string
+  requiredMark?: boolean
 }
 
 export function SelectField({
@@ -104,6 +107,7 @@ export function SelectField({
   options,
   hint,
   required,
+  requiredMark = required,
   className,
   fieldClassName,
   ...props
@@ -112,7 +116,7 @@ export function SelectField({
     <FormField
       label={label}
       htmlFor={props.id}
-      required={required}
+      required={requiredMark}
       hint={hint}
       className={fieldClassName}
     >
@@ -135,12 +139,14 @@ interface TextareaFieldProps extends React.ComponentProps<typeof Textarea> {
   label: React.ReactNode
   hint?: React.ReactNode
   fieldClassName?: string
+  requiredMark?: boolean
 }
 
 export function TextareaField({
   label,
   hint,
   required,
+  requiredMark = required,
   className,
   fieldClassName,
   ...props
@@ -149,7 +155,7 @@ export function TextareaField({
     <FormField
       label={label}
       htmlFor={props.id}
-      required={required}
+      required={requiredMark}
       hint={hint}
       className={fieldClassName}
     >

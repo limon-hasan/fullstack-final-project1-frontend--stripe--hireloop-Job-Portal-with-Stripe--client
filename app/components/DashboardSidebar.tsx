@@ -11,9 +11,7 @@ import {
   Settings,
   Users,
   Building2,
-  type LucideIcon,
   PlusCircle,
-  BuildingComplex,
 } from "lucide-react"
 
 import {
@@ -27,15 +25,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
+import type { UserRole } from "@/types/auth"
+import type { MenuItem } from "@/types/navigation"
 
-export type UserRole = "seeker" | "recruiter" | "admin"
-
-export interface MenuItem {
-  id: string
-  name: string
-  url: string
-  icon: LucideIcon
-}
+export type { UserRole } from "@/types/auth"
+export type { MenuItem } from "@/types/navigation"
 
 // Figma স্ক্রিনশট অনুযায়ী ৩টি রোলের নির্দিষ্ট মেনু আইটেম
 export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {

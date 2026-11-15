@@ -15,10 +15,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { ManagedJob } from "../dashboard/recruiter/jobs/page"
 import { deleteJob } from "@/lib/actions/jobs"
 import { useState } from "react"
 import { toast } from "@/components/ui/toast"
+import type { ManagedJob } from "@/types/jobs"
 
 export function DeleteJobDialog({ job }: { job: ManagedJob }) {
   const [open, setOpen] = useState(false)
