@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Lock, Mail } from "lucide-react"
 
 import { AuthInput } from "@/components/auth/auth-input"
@@ -16,6 +16,10 @@ import { AuthSubmitButton } from "@/components/auth/auth-submit-button"
 import { authClient } from "@/lib/auth-client"
 
 export default function SignInPage() {
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get("redirectTo") ?? "/"
+  console.log("redirect to: ", redirectTo)
+
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState(false)
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
@@ -44,7 +48,7 @@ export default function SignInPage() {
       const { data: signInData, error } = await authClient.signIn.email({
         email: formData.email.trim(),
         password: formData.password,
-        callbackURL: "/",
+        callbackURL: redirectTo,
         rememberMe: formData.rememberMe,
       })
 
@@ -57,7 +61,7 @@ export default function SignInPage() {
         return
       }
 
-      router.push("/")
+      router.push(redirectTo)
       router.refresh()
     } catch (err: unknown) {
       const message =

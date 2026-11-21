@@ -1,8 +1,8 @@
 "use client"
 
-import React from "react"
 import { Banknote, Bookmark, Building2, Clock, Globe, Tag } from "lucide-react"
 import type { ManagedJob } from "@/types/jobs"
+import { useRouter } from "next/navigation"
 
 interface JobCardProps {
   job: ManagedJob
@@ -18,12 +18,22 @@ const formatSalary = (min?: number, max?: number) => {
 }
 
 export const JobCard = ({ job }: JobCardProps) => {
-  const handleBookmarkClick = () => {
+  const router = useRouter()
+
+  const handleViewJobDetails = (jobId: string) => {
+    router.push(`/browse-jobs/${jobId}`)
+  }
+
+  const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation() // যাতে বুকমার্কে ক্লিক করলে ডিটেইলস পেজে চলে না যায়
     // TODO: Implement save/bookmark job action
   }
 
   return (
-    <article className="group rounded-xl border border-zinc-800/80 bg-[#131417] p-5 transition-colors hover:border-zinc-700">
+    <article
+      onClick={() => handleViewJobDetails(job._id)}
+      className="group cursor-pointer rounded-xl border border-zinc-800/80 bg-[#131417] p-5 transition-colors hover:border-zinc-700"
+    >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-4">
           {/* Company Logo Placeholder */}

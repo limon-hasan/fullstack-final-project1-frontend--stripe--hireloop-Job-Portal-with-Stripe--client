@@ -12,6 +12,8 @@ export type JobStatus = "Active" | "Expired"
 export interface JobPayload {
   title: string
   companyName: string
+  companyId?: string
+  recruiterId: string
   category: JobCategory
   jobType: JobType
   isRemote: boolean

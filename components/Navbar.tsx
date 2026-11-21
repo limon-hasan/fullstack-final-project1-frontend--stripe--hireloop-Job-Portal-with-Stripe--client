@@ -4,7 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { MenuIcon, XIcon } from "lucide-react"
+import { MenuIcon, UserIcon, XIcon } from "lucide-react"
 
 import logo from "@/app/images/logo.png"
 
@@ -27,8 +27,13 @@ function Navbar() {
   const [open, setOpen] = React.useState(false)
   const { data: session } = authClient.useSession()
 
+  const user = session?.user as
+    | (NonNullable<typeof session>["user"] & { imageUrl?: string | null })
+    | undefined
+  const userImage = user?.imageUrl || user?.image
+
   const navLinks = [
-    { label: "Browse Jobs", href: "/jobs" },
+    { label: "Browse Jobs", href: "/browse-jobs" },
     { label: "Company", href: "/company" },
     { label: "Pricing", href: "/pricing" },
     {
@@ -41,7 +46,6 @@ function Navbar() {
     await authClient.signOut()
   }
 
-  // ✅ ড্যাশবোর্ডের কোনো পেজে (/dashboard, /dashboard/seeker, /dashboard/recruiter ইত্যাদি) থাকলে Navbar হাইড থাকবে
   if (pathname.startsWith("/dashboard")) {
     return null
   }
@@ -75,7 +79,6 @@ function Navbar() {
             ))}
           </nav>
 
-          {/* Pricing মেনুর পাশে সেন্টারে থাকা সেপারেটর */}
           <div
             aria-hidden="true"
             className="hidden h-4 w-px shrink-0 bg-white/20 lg:block"
@@ -83,7 +86,21 @@ function Navbar() {
 
           {session?.user ? (
             <>
-              <div className="flex items-center py-2">
+              <div className="flex items-center gap-3 py-2">
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt={session.user.name || "User avatar"}
+                    className="h-9 w-9 shrink-0 rounded-full border border-white/15 object-cover"
+                  />
+                ) : (
+                  <div
+                    aria-label="Default user avatar"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-zinc-800 text-neutral-300"
+                  >
+                    <UserIcon className="h-5 w-5" />
+                  </div>
+                )}
                 <span className="text-[15px] font-medium text-neutral-300">
                   Welcome,{" "}
                   <span className="font-semibold text-white">

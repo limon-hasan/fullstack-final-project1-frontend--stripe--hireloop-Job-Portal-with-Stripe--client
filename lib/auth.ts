@@ -21,7 +21,9 @@ export const auth = betterAuth({
                 input: true,             // ✅ ফ্রন্টএন্ড থেকে ইনপুট নিতে এটি true হতে হবে (বা input লাইনটি বাদ দেওয়া যায়)
             },
         },
+
     },
+
     socialProviders: {
         github: {
             clientId: process.env.GOOGLE as string,

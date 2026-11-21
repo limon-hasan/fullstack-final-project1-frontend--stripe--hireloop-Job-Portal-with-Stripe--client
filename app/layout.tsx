@@ -35,9 +35,11 @@ export default function RootLayout({
       className={cn(fontMono.variable, geist.variable)}
     >
       <body className="min-h-screen bg-[#08080a] font-sans text-neutral-100 antialiased selection:bg-[#5b4df5]/30 selection:text-white">
-        <Navbar />
-        <ThemeProvider>{children}</ThemeProvider>
-        <Toaster />
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )

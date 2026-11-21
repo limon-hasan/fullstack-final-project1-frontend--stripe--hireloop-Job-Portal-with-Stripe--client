@@ -1,10 +1,9 @@
-import React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { getJobs } from "@/lib/api/jobs"
-import { JobSearchBar } from "@/components/jobs/JobSearchBar"
-import { JobFiltersSidebar } from "@/components/jobs/JobFiltersSidebar"
-import { JobCard } from "@/components/jobs/JobCard"
-import { JobSortSelect } from "@/components/jobs/JobSortSelect"
+import { JobSearchBar } from "@/app/browse-jobs/components/JobSearchBar"
+import { JobFiltersSidebar } from "@/app/browse-jobs/components/JobFiltersSidebar"
+import { JobCard } from "@/app/browse-jobs/components/JobCard"
+import { JobSortSelect } from "@/app/browse-jobs/components/JobSortSelect"
 
 interface BrowseJobsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

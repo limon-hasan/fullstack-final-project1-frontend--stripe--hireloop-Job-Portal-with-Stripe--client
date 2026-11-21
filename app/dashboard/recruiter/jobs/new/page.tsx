@@ -28,15 +28,18 @@ import type {
   JobType,
   SalaryFrequency,
 } from "@/types/jobs"
+import { useSession } from "@/lib/auth-client"
 
 // Keep the old page-level type import path working.
 export type { JobPayload } from "@/types/jobs"
 
 export default function NewJobsPage() {
+  const { data: session } = useSession()
   const router = useRouter()
   const [formData, setFormData] = useState({
     title: "",
     companyName: "",
+    recruiterId: session?.user.id ?? "",
     category: "Engineering & Tech" as JobCategory,
     jobType: "Full-time" as JobType,
     isRemote: false,

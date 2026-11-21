@@ -1,11 +1,10 @@
 import Link from "next/link"
 import {
   Code2,
-  Eye,
+  FileText,
   Globe,
   MapPin,
   Megaphone,
-  MoreVertical,
   PenTool,
   Pencil,
   Plus,
@@ -14,13 +13,13 @@ import {
   Users,
 } from "lucide-react"
 
-import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { DeleteJobDialog } from "@/components/dashboard/DeleteJobDialog"
 import { BrandButton } from "@/components/shared/brand-button"
 import { PageHeader } from "@/components/shared/page-header"
 import { getJobs } from "@/lib/api/jobs"
+import { getSession } from "@/lib/core/server"
 import type { ManagedJob } from "@/types/jobs"
 
-// Keep the old page-level type import path working.
 export type { ManagedJob } from "@/types/jobs"
 
 function getCategoryStyle(category: string) {
@@ -83,7 +82,8 @@ function formatDeadline(dateString: string) {
 }
 
 export default async function ManageJobsPage() {
-  const jobs = await getJobs()
+  const session = await getSession()
+  const jobs = await getJobs(`recruiterId=${session?.user?.id ?? ""}`)
 
   return (
     <div className="w-full space-y-6 pb-12 text-white">
@@ -107,7 +107,7 @@ export default async function ManageJobsPage() {
       {/* Responsive Table Card */}
       <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-[#121318]">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px] border-collapse text-left">
+          <table className="w-full min-w-[1000px] border-collapse text-left">
             <thead>
               <tr className="border-b border-white/[0.06] bg-[#15161d] text-[11px] font-semibold tracking-wider text-zinc-400 uppercase">
                 <th className="px-6 py-4">Job Title & Dept</th>
@@ -190,14 +190,15 @@ export default async function ManageJobsPage() {
 
                     {/* 5. Applicants */}
                     <td className="px-4 py-4">
-                      <div
-                        className={`flex items-center gap-1.5 text-xs font-medium ${
+                      <Link
+                        href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                        className={`inline-flex items-center gap-1.5 text-xs font-medium underline-offset-4 hover:underline ${
                           isActive ? "text-[#8b81ff]" : "text-zinc-400"
                         }`}
                       >
                         <Users className="h-3.5 w-3.5 shrink-0" />
                         <span>{job.applicantsCount} Candidates</span>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* 6. Status */}
@@ -225,34 +226,28 @@ export default async function ManageJobsPage() {
                       </p>
                     </td>
 
-                    {/* 8. Actions */}
+                    {/* 8. Actions (Compact Icon Buttons) */}
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
                         <Link
-                          href={`/dashboard/recruiter/jobs/${job._id}`}
-                          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/[0.08] bg-[#191a21] px-3 text-xs font-medium text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                          href={`/dashboard/recruiter/jobs/${job._id}/applications`}
+                          title="View Applications"
+                          aria-label="View Applications"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-[#191a21] text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                         >
-                          <Eye className="h-3.5 w-3.5" />
-                          View
+                          <FileText className="h-4 w-4" />
                         </Link>
 
                         <button
                           type="button"
-                          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[#5b4df5]/30 bg-[#1d1c33] px-3 text-xs font-medium text-[#9b93ff] transition-colors hover:bg-[#5b4df5]/20 hover:text-white"
+                          title="Update Job"
+                          aria-label="Update Job"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-[#191a21] text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                         >
-                          <Pencil className="h-3 w-3" />
-                          Update
+                          <Pencil className="h-3.5 w-3.5" />
                         </button>
 
                         <DeleteJobDialog job={job} />
-
-                        <button
-                          type="button"
-                          aria-label="More options"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition-colors hover:bg-white/5 hover:text-white"
-                        >
-                          <MoreVertical className="h-4 w-4" />
-                        </button>
                       </div>
                     </td>
                   </tr>

@@ -12,6 +12,7 @@ import {
   Users,
   Building2,
   PlusCircle,
+  Home,
 } from "lucide-react"
 
 import {
@@ -31,9 +32,9 @@ import type { MenuItem } from "@/types/navigation"
 export type { UserRole } from "@/types/auth"
 export type { MenuItem } from "@/types/navigation"
 
-// Figma স্ক্রিনশট অনুযায়ী ৩টি রোলের নির্দিষ্ট মেনু আইটেম
 export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
   seeker: [
+    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
       name: "Dashboard",
@@ -67,6 +68,7 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
     },
   ],
   recruiter: [
+    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
       name: "Dashboard",
@@ -105,6 +107,7 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
     },
   ],
   admin: [
+    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
       name: "Dashboard",
@@ -138,7 +141,6 @@ export function DashboardSidebar() {
   const pathname = usePathname()
   const { data: session } = authClient.useSession()
 
-  // URL পাথ অথবা সেশন ডেটা থেকে স্বয়ংক্রিয়ভাবে রোল সিলেক্ট করা
   const roleFromPath: UserRole | null = pathname.includes("/admin")
     ? "admin"
     : pathname.includes("/recruiter")
@@ -147,16 +149,23 @@ export function DashboardSidebar() {
         ? "seeker"
         : null
 
-  const role: UserRole = roleFromPath || (session?.user?.role as UserRole) || "seeker"
+  const role: UserRole =
+    roleFromPath || (session?.user?.role as UserRole) || "seeker"
   const currentMenu = menuItemsbyRole[role] || menuItemsbyRole.seeker
 
-  const userName = session?.user?.name || (role === "recruiter" ? "Alex Sterling" : "Seeker Portal")
+  const user = session?.user as
+    | (NonNullable<typeof session>["user"] & { imageUrl?: string | null })
+    | undefined
+
+  const userName = user?.name || "User"
+  const roleLabel = role.charAt(0).toUpperCase() + role.slice(1)
+  const userImage = user?.imageUrl || user?.image
   const userInitial = userName.charAt(0).toUpperCase()
 
   return (
     <Sidebar className="flex flex-col justify-between border-r border-white/[0.08] bg-[#0c0d12] text-white">
       <div>
-        {/* ১. লোগো ও রোল অনুযায়ী হেডার */}
+        {/* ১. লোগো ও ইউজারের নাম + রোল হেডার */}
         <SidebarHeader className="px-5 pt-6 pb-2">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl font-bold tracking-tight text-white">
@@ -164,21 +173,13 @@ export function DashboardSidebar() {
             </span>
           </Link>
 
-          {/* Admin হলে সরাসরি লোগোর নিচে "Admin Console" সাবটাইটেল */}
-          {role === "admin" && (
-            <p className="mt-1 text-xs font-medium text-zinc-400">
-              Admin Console
-            </p>
-          )}
-
-          {/* Seeker হলে প্রোফাইল কার্ড */}
-          {role === "seeker" && (
-            <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/5 bg-[#15161f] p-3">
+          <div className="mt-4 flex flex-col gap-2 rounded-xl border border-white/5 bg-[#15161f] p-3">
+            <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-semibold text-white">
-                {session?.user?.image ? (
+                {userImage ? (
                   <img
-                    src={session.user.image}
-                    alt="User"
+                    src={userImage}
+                    alt={userName}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -187,42 +188,20 @@ export function DashboardSidebar() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13.5px] font-semibold text-white">
-                  Seeker Portal
+                  {userName}
                 </p>
-                <p className="text-[11.5px] text-zinc-400">Professional Tier</p>
+                <p className="text-[11.5px] text-zinc-400">{roleLabel}</p>
               </div>
             </div>
-          )}
 
-          {/* Recruiter হলে প্রোফাইল কার্ড + Premium account ব্যাজ */}
-          {role === "recruiter" && (
-            <div className="mt-4 flex flex-col gap-2 rounded-xl border border-white/5 bg-[#15161f] p-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-semibold text-white">
-                  {session?.user?.image ? (
-                    <img
-                      src={session.user.image}
-                      alt="User"
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    userInitial
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13.5px] font-semibold text-white">
-                    {userName}
-                  </p>
-                  <p className="text-[11.5px] text-zinc-400">Recruiter</p>
-                </div>
-              </div>
+            {role === "recruiter" && (
               <div>
                 <span className="inline-block rounded-full border border-[#483d8b]/40 bg-[#23203f] px-2.5 py-0.5 text-[11px] font-medium text-[#9d8df1]">
                   Premium account
                 </span>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </SidebarHeader>
 
         {/* ২. মেনু আইটেম লিস্ট */}
@@ -240,7 +219,6 @@ export function DashboardSidebar() {
                       render={<Link href={item.url} />}
                       className="group relative flex w-full flex-row items-center gap-3.5 rounded-lg px-3.5 py-2.5 text-[14px] font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-white data-[active=true]:bg-[#1a1b26] data-[active=true]:text-white"
                     >
-                      {/* Figma-র মতো অ্যাক্টিভ লেফট পার্পল বার */}
                       {isActive && (
                         <span className="absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r bg-[#6366f1]" />
                       )}
@@ -255,7 +233,7 @@ export function DashboardSidebar() {
         </SidebarContent>
       </div>
 
-      {/* ৩. সাইডবার ফুটার (ভিডিওর মতো ইমেইল ডিসপ্লে) */}
+      {/* ৩. সাইডবার ফুটার */}
       <SidebarFooter className="border-t border-white/5 p-4">
         <p className="truncate text-xs font-medium text-[#f59e0b] transition-colors hover:text-[#fbbf24]">
           {session?.user?.email || "maksudulhasanlimon@gmail.com"}

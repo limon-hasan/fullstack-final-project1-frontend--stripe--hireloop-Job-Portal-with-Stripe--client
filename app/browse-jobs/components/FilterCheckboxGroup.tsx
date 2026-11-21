@@ -3,6 +3,8 @@
 import React from "react"
 import { Check } from "lucide-react"
 import type { FilterOption } from "@/lib/constants/jobs"
+// import { router } from "better-auth/api"
+import { useRouter } from "next/navigation"
 
 interface FilterCheckboxGroupProps {
   title: string
@@ -19,6 +21,16 @@ export const FilterCheckboxGroup = ({
   selectedValue,
   onChange,
 }: FilterCheckboxGroupProps) => {
+  const router = useRouter()
+  const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(name, e.target.value, "Checked")
+    onChange(name, e.target.value, e.target.checked)
+
+    const params = new URLSearchParams(window.location.search)
+    params.set(name, e.target.value)
+    router.push(`/browse-jobs?${params.toString()}`)
+  }
+
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-medium text-zinc-200">{title}</h3>
@@ -40,10 +52,11 @@ export const FilterCheckboxGroup = ({
                   type="checkbox"
                   name={name}
                   value={option.value}
+                  onChange={handleCheckBoxChange}
                   checked={isChecked}
-                  onChange={(e) =>
-                    onChange(name, option.value, e.target.checked)
-                  }
+                  //   onChange={(e) =>
+                  //     onChange(name, option.value, e.target.checked)
+                  //   }
                   className="peer h-4 w-4 appearance-none rounded border border-zinc-700 bg-transparent transition-colors group-hover:border-zinc-500 checked:border-white checked:bg-white"
                 />
                 <Check
