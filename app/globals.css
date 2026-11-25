@@ -232,6 +232,7 @@ html:not(.dark) .bg-\[\#0d0e12\]\/70,
 html:not(.dark) .bg-\[\#0d0e13\]\/70,
 html:not(.dark) .bg-\[\#0d0e13\]\/90,
 html:not(.dark) .bg-\[\#0e0e13\],
+html:not(.dark) .bg-\[\#0e0f14\],
 html:not(.dark) .bg-\[\#0F1013\],
 html:not(.dark) .bg-\[\#0F1013\]\/70 {
   background-color: #ffffff !important;
@@ -245,7 +246,9 @@ html:not(.dark) .bg-\[\#0e0e13\]\/85 {
 /* Card & elevated surfaces */
 html:not(.dark) .bg-\[\#101116\],
 html:not(.dark) .bg-\[\#111218\],
+html:not(.dark) .bg-\[\#121215\],
 html:not(.dark) .bg-\[\#121318\],
+html:not(.dark) .bg-\[\#12131a\],
 html:not(.dark) .bg-\[\#12131a\]\/80,
 html:not(.dark) .bg-\[\#131417\],
 html:not(.dark) .bg-\[\#14151b\],
@@ -257,10 +260,12 @@ html:not(.dark) .bg-\[\#16161a\] {
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
+html:not(.dark) .bg-\[\#191a21\],
 html:not(.dark) .bg-\[\#191a22\],
 html:not(.dark) .bg-\[\#1A1C21\],
 html:not(.dark) .bg-\[\#1A1C21\]\/70,
 html:not(.dark) .bg-\[\#1F2128\],
+html:not(.dark) .bg-\[\#242338\],
 html:not(.dark) .bg-zinc-800,
 html:not(.dark) .bg-zinc-800\/70,
 html:not(.dark) .bg-zinc-800\/80,
@@ -338,14 +343,20 @@ html:not(.dark) .placeholder-zinc-600::placeholder {
 
 html:not(.dark) .hover\:bg-white\/\[0\.02\]:hover,
 html:not(.dark) .hover\:bg-white\/\[0\.04\]:hover,
+html:not(.dark) .hover\:bg-white\/\[0\.05\]:hover,
 html:not(.dark) .hover\:bg-white\/\[0\.06\]:hover,
+html:not(.dark) .hover\:bg-white\/\[0\.08\]:hover,
+html:not(.dark) .focus\:bg-white\/\[0\.06\]:focus,
+html:not(.dark) .hover\:bg-\[\#14151b\]:hover,
 html:not(.dark) .hover\:bg-\[\#1A1C21\]\/50:hover,
 html:not(.dark) .hover\:bg-\[\#17182a\]:hover,
 html:not(.dark) .hover\:bg-\[\#101116\]:hover {
   background-color: #f1f5f9 !important;
 }
 
-html:not(.dark) .hover\:text-white:hover {
+html:not(.dark) .hover\:text-white:hover:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#5b4df5]"]):not([class*="bg-[#0070E0]"]):not([class*="bg-[linear-gradient"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-blue-6"]):not([class*="bg-violet-6"]):not([class*="bg-zinc-9"]),
+html:not(.dark) .focus\:text-white:focus:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#5b4df5]"]):not([class*="bg-[#0070E0]"]),
+html:not(.dark) .group:hover .group-hover\:text-white:not(.keep-dark *) {
   color: #0f172a !important;
 }
 
