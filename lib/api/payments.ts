@@ -11,7 +11,7 @@ export interface PaymentTransaction {
   planName: string
   amount: number
   currency: string
-  status: "paid" | "unpaid" | "no_payment_required"
+  status: string
   createdAt: string
 }
 

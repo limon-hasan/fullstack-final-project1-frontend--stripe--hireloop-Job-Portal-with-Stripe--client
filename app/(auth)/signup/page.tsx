@@ -118,7 +118,7 @@ export default function SignUpPage() {
     setErrorMessage(null)
 
     try {
-      const { data: signUpData, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         name: formData.name.trim(),
         email: formData.email.trim(),
         password: formData.password,
