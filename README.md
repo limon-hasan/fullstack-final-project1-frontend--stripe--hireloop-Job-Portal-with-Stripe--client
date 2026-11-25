@@ -1,8 +1,6 @@
 # HireLoop Client
 
-A modern, full-featured job board and hiring platform frontend built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Base UI / shadcn**, **Better Auth**, and **Stripe**.
-
-HireLoop connects job seekers, recruiters, and platform administrators through role-based workspaces, real-time application tracking, saved jobs, and Stripe-powered Pro subscriptions.
+> **About:** HireLoop is a modern, role-based job board and hiring platform frontend built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Base UI / shadcn**, **Better Auth**, and **Stripe**. It connects job seekers, recruiters, and admins with real-time application tracking, saved jobs, light/dark themes, and Stripe-powered Pro subscriptions.
 
 ---
 
