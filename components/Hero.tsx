@@ -80,9 +80,9 @@ export function Hero() {
           </span>
         </div>
 
-        <h1 className="max-w-4xl text-[38px] leading-[1.05] font-semibold tracking-[-0.035em] text-balance sm:text-[56px] lg:text-[64px]">
+        <h1 className="max-w-4xl text-[38px] leading-[1.05] font-semibold tracking-[-0.035em] text-balance text-slate-900 dark:text-white sm:text-[56px] lg:text-[64px]">
           Find your next role,
-          <span className="bg-[linear-gradient(100deg,#ffffff_10%,#cfcaff_52%,#8b81ff_92%)] bg-clip-text text-transparent">
+          <span className="bg-[linear-gradient(100deg,#1e1b4b_10%,#5b4df5_52%,#7c3aed_92%)] dark:bg-[linear-gradient(100deg,#ffffff_10%,#cfcaff_52%,#8b81ff_92%)] bg-clip-text text-transparent">
             {" "}
             at your pace
           </span>
@@ -172,7 +172,7 @@ export function Hero() {
           })}
         </div>
 
-        <div className="relative mt-10 w-full max-w-[1400px]">
+        <div className="keep-dark relative mt-10 w-full max-w-[1400px] overflow-hidden rounded-3xl border border-slate-200/80 bg-[#090a0f] shadow-2xl shadow-indigo-950/15 dark:border-transparent dark:bg-transparent dark:shadow-none">
           <div className="relative mx-auto aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9]">
             <Image
               src={globeImg}

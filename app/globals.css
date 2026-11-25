@@ -219,31 +219,42 @@ html:not(.dark) ::-webkit-scrollbar-thumb:hover {
 html:not(.dark) .bg-\[\#08080a\],
 html:not(.dark) .bg-\[\#0B0C0E\],
 html:not(.dark) .bg-\[\#08080a\]\/85,
+html:not(.dark) .bg-\[\#0a0a0d\],
 html:not(.dark) .bg-\[\#0a0b0f\] {
   background-color: #f8fafc !important;
 }
 
 html:not(.dark) .bg-\[\#0b0c10\],
+html:not(.dark) .bg-\[\#0c0d12\],
 html:not(.dark) .bg-\[\#0d0e12\],
+html:not(.dark) .bg-\[\#0d0e12\]\/60,
+html:not(.dark) .bg-\[\#0d0e12\]\/70,
+html:not(.dark) .bg-\[\#0d0e13\]\/70,
+html:not(.dark) .bg-\[\#0d0e13\]\/90,
 html:not(.dark) .bg-\[\#0e0e13\],
 html:not(.dark) .bg-\[\#0F1013\],
 html:not(.dark) .bg-\[\#0F1013\]\/70 {
-  background-color: #f1f5f9 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 html:not(.dark) .bg-\[\#0e0e13\]\/85 {
-  background-color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.92) !important;
 }
 
 /* Card & elevated surfaces */
 html:not(.dark) .bg-\[\#101116\],
+html:not(.dark) .bg-\[\#111218\],
 html:not(.dark) .bg-\[\#121318\],
+html:not(.dark) .bg-\[\#12131a\]\/80,
 html:not(.dark) .bg-\[\#131417\],
 html:not(.dark) .bg-\[\#14151b\],
+html:not(.dark) .bg-\[\#14151c\],
+html:not(.dark) .bg-\[\#15161c\],
 html:not(.dark) .bg-\[\#15161d\],
 html:not(.dark) .bg-\[\#16161a\] {
   background-color: #ffffff !important;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 html:not(.dark) .bg-\[\#191a22\],
@@ -253,39 +264,51 @@ html:not(.dark) .bg-\[\#1F2128\],
 html:not(.dark) .bg-zinc-800,
 html:not(.dark) .bg-zinc-800\/70,
 html:not(.dark) .bg-zinc-800\/80,
+html:not(.dark) .bg-white\/\[0\.03\],
 html:not(.dark) .bg-white\/\[0\.05\],
 html:not(.dark) .bg-white\/\[0\.06\] {
   background-color: #f1f5f9 !important;
 }
 
 /* Typography */
-html:not(.dark) .text-white:not([class*="bg-[#5b4df5]"]):not([class*="bg-[#0070E0]"]):not([class*="bg-[linear-gradient"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-blue-6"]):not([class*="bg-violet-6"]):not([class*="bg-zinc-9"]),
-html:not(.dark) .text-neutral-100,
-html:not(.dark) .text-zinc-100,
-html:not(.dark) .text-zinc-200 {
+html:not(.dark) .text-white:not(.keep-dark):not(.keep-dark *):not([class*="bg-[#5b4df5]"]):not([class*="bg-[#0070E0]"]):not([class*="bg-[linear-gradient"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-blue-6"]):not([class*="bg-violet-6"]):not([class*="bg-zinc-9"]),
+html:not(.dark) .text-neutral-100:not(.keep-dark *),
+html:not(.dark) .text-zinc-100:not(.keep-dark *),
+html:not(.dark) .text-zinc-200:not(.keep-dark *) {
   color: #0f172a !important;
 }
 
-html:not(.dark) .text-neutral-300,
-html:not(.dark) .text-zinc-300 {
+html:not(.dark) .text-neutral-300:not(.keep-dark *),
+html:not(.dark) .text-zinc-300:not(.keep-dark *) {
   color: #334155 !important;
 }
 
-html:not(.dark) .text-zinc-400 {
+html:not(.dark) .text-zinc-400:not(.keep-dark *) {
   color: #475569 !important;
 }
 
-html:not(.dark) .text-zinc-500,
-html:not(.dark) .text-zinc-600,
-html:not(.dark) .text-zinc-700 {
+html:not(.dark) .text-zinc-500:not(.keep-dark *),
+html:not(.dark) .text-zinc-600:not(.keep-dark *),
+html:not(.dark) .text-zinc-700:not(.keep-dark *) {
   color: #64748b !important;
 }
 
-html:not(.dark) .text-\[\#c7c1ff\],
-html:not(.dark) .text-\[\#b7afff\],
-html:not(.dark) .text-\[\#a99fff\],
-html:not(.dark) .text-\[\#9d94ff\] {
+html:not(.dark) .text-\[\#c7c1ff\]:not(.keep-dark *),
+html:not(.dark) .text-\[\#b7afff\]:not(.keep-dark *),
+html:not(.dark) .text-\[\#a99fff\]:not(.keep-dark *),
+html:not(.dark) .text-\[\#9d94ff\]:not(.keep-dark *) {
   color: #4f46e5 !important;
+}
+
+/* Preserve dark showcase cards (e.g. Globe & CTA banners) in light mode */
+html:not(.dark) .keep-dark .bg-\[\#0d0e13\]\/70 {
+  background-color: rgba(13, 14, 19, 0.72) !important;
+}
+html:not(.dark) .keep-dark .bg-white\/\[0\.03\] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+html:not(.dark) .keep-dark [class*="border-white/"] {
+  border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
 /* Active white pills (invert cleanly in light mode) */
@@ -314,7 +337,11 @@ html:not(.dark) .placeholder-zinc-600::placeholder {
 }
 
 html:not(.dark) .hover\:bg-white\/\[0\.02\]:hover,
-html:not(.dark) .hover\:bg-white\/\[0\.06\]:hover {
+html:not(.dark) .hover\:bg-white\/\[0\.04\]:hover,
+html:not(.dark) .hover\:bg-white\/\[0\.06\]:hover,
+html:not(.dark) .hover\:bg-\[\#1A1C21\]\/50:hover,
+html:not(.dark) .hover\:bg-\[\#17182a\]:hover,
+html:not(.dark) .hover\:bg-\[\#101116\]:hover {
   background-color: #f1f5f9 !important;
 }
 

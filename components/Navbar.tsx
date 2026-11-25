@@ -93,17 +93,17 @@ function Navbar() {
 
         <nav
           aria-label="Main"
-          className="hidden items-center gap-1 rounded-xl border border-white/[0.05] bg-white/[0.02] p-1 lg:flex"
+          className="hidden items-center gap-1 rounded-xl border border-slate-200/80 bg-slate-100/70 p-1 lg:flex dark:border-white/[0.05] dark:bg-white/[0.02]"
         >
           {SITE_NAV.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "rounded-lg px-3.5 py-2 text-[13.5px] font-medium transition-colors",
+                "rounded-lg border px-3.5 py-2 text-[13.5px] font-medium transition-all",
                 isActive(link.href)
-                  ? "bg-white/[0.08] text-white"
-                  : "text-zinc-400 hover:bg-white/[0.04] hover:text-white"
+                  ? "border-[#5b4df5]/40 bg-white text-[#4f46e5] shadow-xs dark:border-[#5b4df5]/50 dark:bg-white/[0.08] dark:text-white dark:shadow-none"
+                  : "border-transparent text-zinc-400 hover:bg-white/[0.04] hover:text-white"
               )}
             >
               {link.label}

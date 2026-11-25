@@ -80,7 +80,7 @@ export function TransactionHistoryTable({
     <div className="overflow-x-auto">
       <table className="w-full min-w-[680px] border-collapse text-left">
         <thead>
-          <tr className="border-b border-white/[0.06] bg-[#14151c] text-[11px] font-semibold tracking-wider text-zinc-400 uppercase">
+          <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold tracking-wider text-slate-600 uppercase dark:border-white/[0.06] dark:bg-[#14151c] dark:text-zinc-400">
             <th className="px-5 py-3.5">Transaction</th>
             <th className="px-4 py-3.5">Plan</th>
             {showCustomer ? <th className="px-4 py-3.5">Customer</th> : null}

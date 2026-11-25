@@ -77,7 +77,7 @@ export function CompanyProfileForm({ defaultName }: CompanyProfileFormProps) {
   const completion = Math.round(
     (Object.values(profile).filter((value) => value.trim().length > 0).length /
       Object.keys(profile).length) *
-      100
+    100
   )
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -284,7 +284,7 @@ export function CompanyProfileForm({ defaultName }: CompanyProfileFormProps) {
 
       <div className="space-y-5">
         <section className="overflow-hidden rounded-2xl border border-white/[0.07] bg-[#101116]">
-          <div className="relative h-24 bg-[linear-gradient(135deg,#241f5c,#101116_60%)]">
+          <div className="relative h-24 bg-[linear-gradient(135deg,#e0e7ff,#f8fafc_60%)] dark:bg-[linear-gradient(135deg,#241f5c,#101116_60%)]">
             <div
               aria-hidden="true"
               className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(139,129,255,0.25),transparent_55%)]"

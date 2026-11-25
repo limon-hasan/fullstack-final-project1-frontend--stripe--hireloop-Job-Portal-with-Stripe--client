@@ -359,7 +359,7 @@ const JobsDetailsPage = async ({ params }: JobDetailsPageProps) => {
                 )}
               </div>
 
-              <div className="rounded-2xl border border-[#5b4df5]/25 bg-[linear-gradient(150deg,rgba(91,77,245,0.16),rgba(13,14,18,0.95)_65%)] p-5">
+              <div className="rounded-2xl border border-[#5b4df5]/25 bg-[linear-gradient(150deg,rgba(91,77,245,0.08),rgba(255,255,255,0.98)_65%)] p-5 shadow-sm dark:bg-[linear-gradient(150deg,rgba(91,77,245,0.16),rgba(13,14,18,0.95)_65%)] dark:shadow-none">
                 <h2 className="text-sm font-semibold text-white">
                   Ready to apply?
                 </h2>

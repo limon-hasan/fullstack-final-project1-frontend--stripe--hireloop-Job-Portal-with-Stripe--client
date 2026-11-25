@@ -143,7 +143,7 @@ export function CategoryShowcase() {
 export function HowItWorks() {
   return (
     <section className="mx-auto w-full max-w-[1240px] px-4 pt-20 sm:px-6">
-      <div className="rounded-3xl border border-white/[0.07] bg-[linear-gradient(180deg,#0c0d12_0%,#08080a_100%)] p-6 sm:p-10">
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 dark:border-white/[0.07] dark:bg-[linear-gradient(180deg,#0c0d12_0%,#08080a_100%)] dark:shadow-none">
         <div className="max-w-2xl">
           <p className="text-[11px] font-semibold tracking-[0.18em] text-[#8b81ff] uppercase">
             How HireLoop works
@@ -161,7 +161,7 @@ export function HowItWorks() {
           {HOW_IT_WORKS.map(({ icon: Icon, title, description }, index) => (
             <div
               key={title}
-              className="relative rounded-2xl border border-white/[0.06] bg-[#0e0f14] p-5"
+              className="relative rounded-2xl border border-slate-200/80 bg-slate-50/70 p-5 dark:border-white/[0.06] dark:bg-[#0e0f14]"
             >
               <div className="flex items-center justify-between">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#5b4df5]/25 bg-[#5b4df5]/10 text-[#a99fff]">
@@ -213,7 +213,7 @@ export function BenefitsSplit() {
             key={group.title}
             className={`relative overflow-hidden rounded-3xl border p-6 sm:p-8 ${
               index === 0
-                ? "border-[#5b4df5]/20 bg-[linear-gradient(145deg,rgba(91,77,245,0.14),rgba(12,13,18,0.9)_55%)]"
+                ? "border-[#5b4df5]/25 bg-[linear-gradient(145deg,rgba(91,77,245,0.08),rgba(255,255,255,0.98)_55%)] shadow-sm dark:border-[#5b4df5]/20 dark:bg-[linear-gradient(145deg,rgba(91,77,245,0.14),rgba(12,13,18,0.9)_55%)] dark:shadow-none"
                 : "border-white/[0.07] bg-[#0d0e12]"
             }`}
           >
@@ -306,7 +306,7 @@ export function Testimonials() {
 export function CtaBand() {
   return (
     <section className="mx-auto w-full max-w-[1240px] px-4 pt-20 sm:px-6">
-      <div className="relative overflow-hidden rounded-3xl border border-[#5b4df5]/25 bg-[linear-gradient(120deg,#121020_0%,#16142a_45%,#0b0c12_100%)] px-6 py-10 text-center sm:px-10 sm:py-14">
+      <div className="keep-dark relative overflow-hidden rounded-3xl border border-[#5b4df5]/25 bg-[linear-gradient(120deg,#121020_0%,#16142a_45%,#0b0c12_100%)] px-6 py-10 text-center shadow-xl shadow-indigo-950/10 sm:px-10 sm:py-14">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"

@@ -277,7 +277,7 @@ export function DashboardSidebar() {
                     isActive={isActive}
                     render={<Link href={item.url} />}
                     className={cn(
-                      "group relative flex h-10 w-full flex-row items-center gap-3 rounded-lg px-3 text-[13.5px] font-medium text-zinc-400 transition-colors hover:bg-white/[0.04] hover:text-white data-[active=true]:bg-white/[0.06] data-[active=true]:text-white"
+                      "group relative flex h-10 w-full flex-row items-center gap-3 rounded-lg px-3 text-[13.5px] font-medium text-zinc-400 transition-colors hover:bg-slate-100 hover:text-slate-900 data-[active=true]:bg-[#eef2ff] data-[active=true]:text-[#4f46e5] dark:hover:bg-white/[0.04] dark:hover:text-white dark:data-[active=true]:bg-white/[0.06] dark:data-[active=true]:text-white"
                     )}
                   >
                     {isActive && (

@@ -41,11 +41,10 @@ export default function PricingPage() {
           {PRICING_PLANS.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-7 ${
-                plan.highlighted
-                  ? "border-[#5b4df5]/45 bg-[linear-gradient(160deg,rgba(91,77,245,0.18),rgba(12,13,18,0.95)_55%)] shadow-[0_30px_80px_-40px_rgba(91,77,245,0.8)]"
+              className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-7 ${plan.highlighted
+                  ? "border-[#5b4df5]/45 bg-[linear-gradient(160deg,rgba(91,77,245,0.09),rgba(255,255,255,0.98)_55%)] shadow-[0_24px_60px_-36px_rgba(91,77,245,0.35)] dark:bg-[linear-gradient(160deg,rgba(91,77,245,0.18),rgba(12,13,18,0.95)_55%)] dark:shadow-[0_30px_80px_-40px_rgba(91,77,245,0.8)]"
                   : "border-white/[0.07] bg-[#0d0e12]"
-              }`}
+                }`}
             >
               {plan.highlighted && (
                 <span className="absolute top-5 right-5 rounded-full border border-[#8b81ff]/40 bg-[#5b4df5]/20 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#d6d2ff] uppercase">
@@ -76,11 +75,10 @@ export default function PricingPage() {
                     className="flex items-start gap-2.5 text-[13px] text-zinc-300"
                   >
                     <span
-                      className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border ${
-                        plan.highlighted
+                      className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border ${plan.highlighted
                           ? "border-[#8b81ff]/40 bg-[#5b4df5]/20 text-[#d6d2ff]"
                           : "border-emerald-500/25 bg-emerald-500/10 text-emerald-300"
-                      }`}
+                        }`}
                     >
                       <Check className="h-3 w-3" />
                     </span>

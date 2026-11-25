@@ -305,7 +305,7 @@ export const ApplicationsBoard = ({ applications }: ApplicationsBoardProps) => {
                   return (
                     <tr
                       key={app._id}
-                      className="transition-colors hover:bg-[#1A1C21]/50"
+                      className="transition-colors hover:bg-slate-50 dark:hover:bg-[#1A1C21]/50"
                     >
                       {/* Job Title + Metadata */}
                       <td className="px-6 py-4">
