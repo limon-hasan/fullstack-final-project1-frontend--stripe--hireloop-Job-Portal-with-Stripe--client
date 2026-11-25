@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { toast } from "@/components/ui/toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -110,6 +111,10 @@ export function DashboardTopbar() {
 
   const handleSignOut = async () => {
     await authClient.signOut()
+    toast.add({
+      title: "Signed out",
+      description: "You have been signed out of HireLoop.",
+    })
     router.push("/")
     router.refresh()
   }

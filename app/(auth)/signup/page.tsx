@@ -21,6 +21,7 @@ import {
   AuthLayout,
 } from "@/components/auth/auth-layout"
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button"
+import { toast } from "@/components/ui/toast"
 import { authClient } from "@/lib/auth-client"
 import type { UserRole } from "@/types/auth"
 
@@ -91,10 +92,18 @@ export default function SignUpPage() {
       }
 
       setImageUrl(result.data.url)
+      toast.add({
+        title: "Photo uploaded",
+        description: "Your profile photo is ready.",
+      })
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to upload image."
       setErrorMessage(message)
+      toast.add({
+        title: "Upload failed",
+        description: message,
+      })
       setSelectedImage(null)
     } finally {
       setIsUploadingImage(false)
@@ -119,13 +128,20 @@ export default function SignUpPage() {
 
       if (error) {
         console.error("SignUp error details:", error)
-        setErrorMessage(
+        const msg =
           error.message || "Failed to create account. Please try again."
-        )
+        setErrorMessage(msg)
+        toast.add({
+          title: "Sign up failed",
+          description: msg,
+        })
         return
       }
 
-      console.log("Sign up successful:", signUpData)
+      toast.add({
+        title: "Account created!",
+        description: `Welcome to HireLoop as a ${formData.role}.`,
+      })
       const dest =
         formData.role === "recruiter"
           ? "/dashboard/recruiter"
@@ -137,6 +153,10 @@ export default function SignUpPage() {
       const message =
         err instanceof Error ? err.message : "An unexpected error occurred."
       setErrorMessage(message)
+      toast.add({
+        title: "Sign up failed",
+        description: message,
+      })
     } finally {
       setIsLoading(false)
     }

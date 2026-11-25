@@ -12,9 +12,10 @@ import {
   TrendingUp,
 } from "lucide-react"
 
-import { EmptyState } from "@/components/shared/empty-state"
+import { TransactionHistoryTable } from "@/components/dashboard/TransactionHistoryTable"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatCard } from "@/components/shared/stat-card"
+import { getTransactions } from "@/lib/api/payments"
 
 export const metadata: Metadata = {
   title: "Payments",
@@ -41,7 +42,27 @@ const PAYMENT_FLOW = [
   },
 ]
 
-export default function AdminPaymentsPage() {
+export default async function AdminPaymentsPage() {
+  const transactions = await getTransactions(50)
+  const paidTransactions = transactions.filter((tx) => tx.status === "paid")
+
+  const now = new Date()
+  const monthRevenue = paidTransactions
+    .filter((tx) => {
+      const d = new Date(tx.createdAt)
+      return (
+        d.getMonth() === now.getMonth() &&
+        d.getFullYear() === now.getFullYear()
+      )
+    })
+    .reduce((sum, tx) => sum + tx.amount, 0)
+
+  const uniqueCustomers = new Set(
+    paidTransactions
+      .map((tx) => tx.userId || tx.customerEmail)
+      .filter(Boolean)
+  ).size
+
   return (
     <div className="space-y-6 pb-12">
       <PageHeader
@@ -65,21 +86,25 @@ export default function AdminPaymentsPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Revenue this month"
-          value="$0"
+          value={`$${monthRevenue.toFixed(2)}`}
           icon={TrendingUp}
           accent="emerald"
-          hint="Awaiting first payment"
+          hint={
+            paidTransactions.length > 0
+              ? "From verified checkouts"
+              : "Awaiting first payment"
+          }
         />
         <StatCard
           label="Active subscriptions"
-          value="0"
+          value={uniqueCustomers}
           icon={RefreshCcw}
           accent="violet"
           hint="Pro and Teams plans"
         />
         <StatCard
           label="Successful payments"
-          value="0"
+          value={paidTransactions.length}
           icon={CheckCircle2}
           accent="sky"
           hint="All time"
@@ -110,23 +135,12 @@ export default function AdminPaymentsPage() {
             </span>
           </div>
 
-          <div className="p-6">
-            <EmptyState
-              compact
-              icon={Receipt}
-              title="No transactions yet"
-              description="Once a customer completes checkout, the payment and its receipt will appear here."
-              action={
-                <Link
-                  href="/checkout"
-                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#5b4df5] px-4 text-[13px] font-medium text-white transition-colors hover:bg-[#6a5cff]"
-                >
-                  <CreditCard className="h-4 w-4" />
-                  Test the checkout flow
-                </Link>
-              }
-            />
-          </div>
+          <TransactionHistoryTable
+            transactions={transactions}
+            showCustomer
+            emptyActionHref="/checkout"
+            emptyActionLabel="Test the checkout flow"
+          />
         </section>
 
         <div className="space-y-5">

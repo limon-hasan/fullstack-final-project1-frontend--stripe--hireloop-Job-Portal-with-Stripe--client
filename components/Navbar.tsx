@@ -18,6 +18,7 @@ import {
 import logo from "@/app/images/logo.png"
 
 import { Button } from "@/components/ui/button"
+import { toast } from "@/components/ui/toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,6 +58,10 @@ function Navbar() {
 
   const handleSignOut = async () => {
     await authClient.signOut()
+    toast.add({
+      title: "Signed out",
+      description: "You have been signed out of HireLoop.",
+    })
     setOpen(false)
     router.push("/")
     router.refresh()

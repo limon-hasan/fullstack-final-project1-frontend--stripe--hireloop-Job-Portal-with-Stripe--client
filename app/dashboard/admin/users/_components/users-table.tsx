@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Ban, CheckCircle2, Clock, Users } from "lucide-react"
+import { toast } from "@/components/ui/toast"
 import { updateUserRole } from "@/lib/actions/users"
 import type { AdminUser, UserRole } from "@/types/users"
 import { RoleBadge } from "./role-badge"
@@ -38,10 +39,24 @@ export function UsersTable({ users }: UsersTableProps) {
   const [roles, setRoles] = useState<Record<string, UserRole>>({})
 
   const handleRoleChange = async (id: string, role: UserRole) => {
+    const previousRole = roles[id] ?? users.find((u) => u.id === id)?.role
     setRoles((prev) => ({ ...prev, [id]: role }))
-    const res = await updateUserRole(id, role)
-    if (res.modifiedCount > 0) {
-      console.log("res after update : ", res)
+    try {
+      await updateUserRole(id, role)
+      toast.add({
+        title: "Role updated",
+        description: `User role changed to ${role}.`,
+      })
+      router.refresh()
+    } catch (err: unknown) {
+      if (previousRole) {
+        setRoles((prev) => ({ ...prev, [id]: previousRole }))
+      }
+      toast.add({
+        title: "Failed to update role",
+        description:
+          err instanceof Error ? err.message : "Please try again.",
+      })
     }
   }
 

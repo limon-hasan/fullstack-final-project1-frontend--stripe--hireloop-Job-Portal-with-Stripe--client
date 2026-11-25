@@ -13,6 +13,7 @@ import {
   AuthLayout,
 } from "@/components/auth/auth-layout"
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button"
+import { toast } from "@/components/ui/toast"
 import { authClient } from "@/lib/auth-client"
 
 function SignInContent() {
@@ -53,11 +54,20 @@ function SignInContent() {
       console.log("Sign In Response:", signInData, error)
 
       if (error) {
-        setErrorMessage(
+        const msg =
           error.message || "Invalid email or password. Please try again."
-        )
+        setErrorMessage(msg)
+        toast.add({
+          title: "Sign in failed",
+          description: msg,
+        })
         return
       }
+
+      toast.add({
+        title: "Welcome back!",
+        description: `Signed in as ${signInData?.user?.email || formData.email.trim()}.`,
+      })
 
       // Redirect to explicit redirectTo, or fall back to role-based dashboard
       if (redirectTo) {
@@ -77,6 +87,10 @@ function SignInContent() {
       const message =
         err instanceof Error ? err.message : "An unexpected error occurred."
       setErrorMessage(message)
+      toast.add({
+        title: "Sign in failed",
+        description: message,
+      })
     } finally {
       setIsLoading(false)
     }

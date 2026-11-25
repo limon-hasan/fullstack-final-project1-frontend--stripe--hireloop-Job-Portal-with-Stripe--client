@@ -11,9 +11,10 @@ import {
   Sparkles,
 } from "lucide-react"
 
+import { TransactionHistoryTable } from "@/components/dashboard/TransactionHistoryTable"
 import { BrandButton } from "@/components/shared/brand-button"
-import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
+import { getUserTransactions } from "@/lib/api/payments"
 import { getUserPremiumbyId } from "@/lib/api/users"
 import { getSession } from "@/lib/core/server"
 import { PRICING_PLANS } from "@/lib/constants/marketing"
@@ -32,9 +33,11 @@ const PRO_FEATURES = [
 export default async function SeekerBillingPage() {
   const session = await getSession()
   const userId = session?.user?.id ?? ""
-  const { premium } = userId
-    ? await getUserPremiumbyId(userId)
-    : { premium: false }
+  const userEmail = session?.user?.email ?? ""
+  const [{ premium }, transactions] = await Promise.all([
+    userId ? getUserPremiumbyId(userId) : Promise.resolve({ premium: false }),
+    getUserTransactions(userId, userEmail),
+  ])
 
   return (
     <div className="space-y-6 pb-12">
@@ -190,37 +193,27 @@ export default async function SeekerBillingPage() {
             </span>
             <div>
               <h2 className="text-sm font-semibold text-white">
-                Invoice history
+                Transaction history
               </h2>
               <p className="text-[11px] text-zinc-500">
                 Receipts appear once a payment has been processed.
               </p>
             </div>
           </div>
+          <Link
+            href="/dashboard/seeker/transactions"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-[#a99fff] transition-colors hover:text-white"
+          >
+            View full history
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
-        <div className="p-6">
-          <EmptyState
-            compact
-            icon={Receipt}
-            title={premium ? "Invoices are being prepared" : "No invoices yet"}
-            description={
-              premium
-                ? "Your subscription is active. Stripe receipts will show up here after the next billing cycle."
-                : "Upgrade to Pro to unlock unlimited applications and priority visibility."
-            }
-            action={
-              !premium ? (
-                <BrandButton
-                  nativeButton={false}
-                  render={<Link href="/checkout" />}
-                >
-                  See Pro plan
-                </BrandButton>
-              ) : undefined
-            }
-          />
-        </div>
+        <TransactionHistoryTable
+          transactions={transactions.slice(0, 5)}
+          emptyActionHref={!premium ? "/checkout" : undefined}
+          emptyActionLabel="See Pro plan"
+        />
       </section>
 
       <section>

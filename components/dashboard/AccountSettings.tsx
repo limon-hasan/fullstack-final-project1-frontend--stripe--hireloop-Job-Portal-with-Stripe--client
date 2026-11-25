@@ -181,6 +181,10 @@ export function AccountSettings({ role }: AccountSettingsProps) {
 
   const handleSignOut = async () => {
     await authClient.signOut()
+    toast.add({
+      title: "Signed out",
+      description: "You have been signed out of HireLoop.",
+    })
     router.push("/")
     router.refresh()
   }

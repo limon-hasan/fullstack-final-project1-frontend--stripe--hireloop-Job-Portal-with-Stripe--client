@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react"
+import { toast } from "@/components/ui/toast"
 import { authClient } from "@/lib/auth-client"
 
 const PRO_FEATURES = [
@@ -25,11 +26,14 @@ export default function CheckoutPage({
   searchParams: Promise<{ canceled?: string }>
 }) {
   const { canceled } = use(searchParams)
-  if (canceled) {
-    console.log(
-      "Order canceled -- continue to shop around and check out when you're ready."
-    )
-  }
+  useEffect(() => {
+    if (canceled) {
+      toast.add({
+        title: "Checkout canceled",
+        description: "No charges were made. You can upgrade anytime.",
+      })
+    }
+  }, [canceled])
 
   const { data: session } = authClient.useSession()
   const [currency, setCurrency] = useState<"USD" | "BDT">("USD")
@@ -94,11 +98,10 @@ export default function CheckoutPage({
                 <button
                   type="button"
                   onClick={() => setCurrency("USD")}
-                  className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left transition-all ${
-                    currency === "USD"
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left transition-all ${currency === "USD"
                       ? "border-white bg-[#1A1C21] text-white"
                       : "border-zinc-800 bg-[#0F1013] text-zinc-400 hover:border-zinc-700"
-                  }`}
+                    }`}
                 >
                   <span className="text-xs font-medium">USD</span>
                   <span className="text-sm font-bold">$20.00</span>
@@ -107,11 +110,10 @@ export default function CheckoutPage({
                 <button
                   type="button"
                   onClick={() => setCurrency("BDT")}
-                  className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left transition-all ${
-                    currency === "BDT"
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 text-left transition-all ${currency === "BDT"
                       ? "border-white bg-[#1A1C21] text-white"
                       : "border-zinc-800 bg-[#0F1013] text-zinc-400 hover:border-zinc-700"
-                  }`}
+                    }`}
                 >
                   <span className="text-xs font-medium">BDT</span>
                   <span className="text-sm font-bold">2,553.33</span>

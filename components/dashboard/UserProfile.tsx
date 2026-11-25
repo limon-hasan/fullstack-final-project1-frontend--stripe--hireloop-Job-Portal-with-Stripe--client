@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { SectionCard } from "@/components/shared/section-card"
 import { toast } from "@/components/ui/toast"
+import { useSavedJobs } from "@/hooks/use-saved-jobs"
 import { authClient } from "@/lib/auth-client"
 import { getInitials } from "@/lib/format"
 import { cn } from "@/lib/utils"
@@ -96,12 +97,25 @@ function InfoRow({ icon: Icon, label, value, href }: InfoRowProps) {
   )
 }
 
-interface UserProfileProps {
-  role: UserRole
+export interface ProfileStats {
+  applicationsCount?: number
+  profileViewsCount?: number
+  activeJobsCount?: number
+  applicantsCount?: number
+  hiredCount?: number
+  usersCount?: number
+  companiesCount?: number
+  jobsCount?: number
 }
 
-export function UserProfile({ role }: UserProfileProps) {
+interface UserProfileProps {
+  role: UserRole
+  initialStats?: ProfileStats
+}
+
+export function UserProfile({ role, initialStats }: UserProfileProps) {
   const { data: session } = authClient.useSession()
+  const { savedJobs, isReady: isSavedReady } = useSavedJobs()
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [displayName, setDisplayName] = useState("")
@@ -160,20 +174,35 @@ export function UserProfile({ role }: UserProfileProps) {
   const stats: StatBadgeProps[] =
     role === "seeker"
       ? [
-          { label: "Applications", value: "—" },
-          { label: "Saved jobs", value: "—" },
-          { label: "Profile views", value: "—" },
+          {
+            label: "Applications",
+            value: initialStats?.applicationsCount ?? 0,
+          },
+          {
+            label: "Saved jobs",
+            value: isSavedReady ? savedJobs.length : "…",
+          },
+          {
+            label: "Profile views",
+            value: initialStats?.profileViewsCount ?? 0,
+          },
         ]
       : role === "recruiter"
         ? [
-            { label: "Active jobs", value: "—" },
-            { label: "Applicants", value: "—" },
-            { label: "Hired", value: "—" },
+            {
+              label: "Active jobs",
+              value: initialStats?.activeJobsCount ?? 0,
+            },
+            {
+              label: "Applicants",
+              value: initialStats?.applicantsCount ?? 0,
+            },
+            { label: "Hired", value: initialStats?.hiredCount ?? 0 },
           ]
         : [
-            { label: "Users", value: "—" },
-            { label: "Companies", value: "—" },
-            { label: "Jobs listed", value: "—" },
+            { label: "Users", value: initialStats?.usersCount ?? 0 },
+            { label: "Companies", value: initialStats?.companiesCount ?? 0 },
+            { label: "Jobs listed", value: initialStats?.jobsCount ?? 0 },
           ]
 
   return (

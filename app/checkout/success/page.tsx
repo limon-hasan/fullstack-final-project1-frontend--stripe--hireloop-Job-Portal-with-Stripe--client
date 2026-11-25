@@ -8,6 +8,7 @@ import {
   CreditCard,
   Hash,
   Mail,
+  Receipt,
   ShieldCheck,
   Sparkles,
 } from "lucide-react"
@@ -165,18 +166,26 @@ export default async function CheckoutSuccessPage({
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-3">
+                <Link
+                  href="/dashboard/seeker/transactions"
+                  className="flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0070E0] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#3F90E5]"
+                >
+                  <Receipt className="h-4 w-4" />
+                  Payment History
+                </Link>
+
                 <Link
                   href="/dashboard/seeker"
-                  className="flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0070E0] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#3F90E5]"
+                  className="flex h-12 items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-[#1A1C21] px-4 text-sm font-semibold text-zinc-200 transition-colors hover:border-zinc-700 hover:text-white"
                 >
-                  Go to Dashboard
+                  Dashboard
                   <ArrowRight className="h-4 w-4" />
                 </Link>
 
                 <Link
                   href="/browse-jobs"
-                  className="flex h-12 items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-[#1A1C21] px-5 text-sm font-semibold text-zinc-200 transition-colors hover:border-zinc-700 hover:text-white"
+                  className="flex h-12 items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-[#1A1C21] px-4 text-sm font-semibold text-zinc-200 transition-colors hover:border-zinc-700 hover:text-white"
                 >
                   <Briefcase className="h-4 w-4" />
                   Browse Jobs

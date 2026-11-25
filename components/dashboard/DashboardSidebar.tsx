@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   LogOut,
   PlusCircle,
+  Receipt,
   Settings,
   UserRound,
   Users,
@@ -32,6 +33,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { toast } from "@/components/ui/toast"
 import { authClient } from "@/lib/auth-client"
 import { getInitials } from "@/lib/format"
 import { cn } from "@/lib/utils"
@@ -67,6 +69,12 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
       name: "Billing",
       url: "/dashboard/seeker/billing",
       icon: CreditCard,
+    },
+    {
+      id: "transactions",
+      name: "Transactions",
+      url: "/dashboard/seeker/transactions",
+      icon: Receipt,
     },
     {
       id: "profile",
@@ -225,6 +233,10 @@ export function DashboardSidebar() {
 
   const handleSignOut = async () => {
     await authClient.signOut()
+    toast.add({
+      title: "Signed out",
+      description: "You have been signed out of HireLoop.",
+    })
     router.push("/")
     router.refresh()
   }

@@ -15,6 +15,7 @@ import {
   PenTool,
   Search,
 } from "lucide-react"
+import { toast } from "@/components/ui/toast"
 import type {
   ApplicationStatus,
   ManagedApplication,
@@ -133,6 +134,10 @@ export const ApplicationsBoard = ({ applications }: ApplicationsBoardProps) => {
   )
 
   const handleExportPdf = () => {
+    toast.add({
+      title: "Preparing PDF export",
+      description: "Use your browser print dialog to save as PDF.",
+    })
     window.print()
   }
 
