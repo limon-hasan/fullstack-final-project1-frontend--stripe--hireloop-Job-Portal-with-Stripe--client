@@ -11,6 +11,7 @@ import {
   LogOut,
   Search,
   Settings,
+  UserRound,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -40,18 +41,21 @@ const PAGE_LABELS: Array<{ match: string; label: string }> = [
   { match: "/dashboard/seeker/applications", label: "Applications" },
   { match: "/dashboard/seeker/billing", label: "Billing" },
   { match: "/dashboard/seeker/settings", label: "Settings" },
+  { match: "/dashboard/seeker/profile", label: "My profile" },
   { match: "/dashboard/seeker", label: "Overview" },
   { match: "/dashboard/recruiter/company", label: "My company" },
   { match: "/dashboard/recruiter/jobs/new", label: "Post a job" },
   { match: "/dashboard/recruiter/jobs", label: "Manage jobs" },
   { match: "/dashboard/recruiter/applications", label: "Applications" },
   { match: "/dashboard/recruiter/settings", label: "Settings" },
+  { match: "/dashboard/recruiter/profile", label: "My profile" },
   { match: "/dashboard/recruiter", label: "Overview" },
   { match: "/dashboard/admin/users", label: "Users" },
   { match: "/dashboard/admin/companies", label: "Companies" },
   { match: "/dashboard/admin/jobs", label: "Jobs" },
   { match: "/dashboard/admin/payments", label: "Payments" },
   { match: "/dashboard/admin/settings", label: "Settings" },
+  { match: "/dashboard/admin/profile", label: "My profile" },
   { match: "/dashboard/admin", label: "Overview" },
 ]
 
@@ -78,6 +82,7 @@ export function DashboardTopbar() {
   const role = resolveRole(pathname, session?.user?.role)
   const settingsHref = `/dashboard/${role}/settings`
   const dashboardHref = `/dashboard/${role}`
+  const profileHref = `/dashboard/${role}/profile`
 
   const pageLabel = useMemo(
     () =>
@@ -235,6 +240,13 @@ export function DashboardTopbar() {
             >
               <LayoutDashboard className="h-4 w-4 text-zinc-400" />
               Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              render={<Link href={profileHref} />}
+              className="gap-2.5 px-2 py-2 text-[13px] focus:bg-white/[0.06] focus:text-white"
+            >
+              <UserRound className="h-4 w-4 text-zinc-400" />
+              My profile
             </DropdownMenuItem>
             <DropdownMenuItem
               render={<Link href={settingsHref} />}

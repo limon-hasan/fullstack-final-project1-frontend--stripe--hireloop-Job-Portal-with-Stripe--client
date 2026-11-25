@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import {
@@ -14,8 +15,11 @@ import {
   LogOut,
   PlusCircle,
   Settings,
+  UserRound,
   Users,
 } from "lucide-react"
+
+import logo from "@/app/images/logo.png"
 
 import {
   Sidebar,
@@ -65,6 +69,12 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
       icon: CreditCard,
     },
     {
+      id: "profile",
+      name: "My profile",
+      url: "/dashboard/seeker/profile",
+      icon: UserRound,
+    },
+    {
       id: "settings",
       name: "Settings",
       url: "/dashboard/seeker/settings",
@@ -103,6 +113,12 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
       icon: FileText,
     },
     {
+      id: "profile",
+      name: "My profile",
+      url: "/dashboard/recruiter/profile",
+      icon: UserRound,
+    },
+    {
       id: "settings",
       name: "Settings",
       url: "/dashboard/recruiter/settings",
@@ -129,6 +145,12 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
       name: "Payments",
       url: "/dashboard/admin/payments",
       icon: CreditCard,
+    },
+    {
+      id: "profile",
+      name: "My profile",
+      url: "/dashboard/admin/profile",
+      icon: UserRound,
     },
     {
       id: "settings",
@@ -212,11 +234,15 @@ export function DashboardSidebar() {
       <SidebarHeader className="px-4 pt-5 pb-2">
         <Link
           href="/"
+          aria-label="HireLoop home"
           className="flex items-center gap-2 px-1 outline-none focus-visible:ring-2 focus-visible:ring-[#5b4df5]/60"
         >
-          <span className="text-[22px] font-bold tracking-tight text-white">
-            hire<span className="text-amber-500">loop</span>
-          </span>
+          <Image
+            src={logo}
+            alt="HireLoop"
+            priority
+            className="h-8 w-auto"
+          />
         </Link>
         <p className="mt-1 px-1 text-[11px] font-medium tracking-[0.14em] text-zinc-500 uppercase">
           {meta.workspace}

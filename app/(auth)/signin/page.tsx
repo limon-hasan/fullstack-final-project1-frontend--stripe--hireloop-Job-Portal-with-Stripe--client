@@ -17,7 +17,7 @@ import { authClient } from "@/lib/auth-client"
 
 function SignInContent() {
   const searchParams = useSearchParams()
-  const redirectTo = searchParams.get("redirectTo") ?? "/"
+  const redirectTo = searchParams.get("redirectTo") ?? ""
 
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -47,7 +47,6 @@ function SignInContent() {
       const { data: signInData, error } = await authClient.signIn.email({
         email: formData.email.trim(),
         password: formData.password,
-        callbackURL: redirectTo,
         rememberMe: formData.rememberMe,
       })
 
@@ -60,7 +59,19 @@ function SignInContent() {
         return
       }
 
-      router.push(redirectTo)
+      // Redirect to explicit redirectTo, or fall back to role-based dashboard
+      if (redirectTo) {
+        router.push(redirectTo)
+      } else {
+        const role = (signInData?.user as { role?: string } | undefined)?.role
+        const dest =
+          role === "recruiter"
+            ? "/dashboard/recruiter"
+            : role === "admin"
+              ? "/dashboard/admin"
+              : "/dashboard/seeker"
+        router.push(dest)
+      }
       router.refresh()
     } catch (err: unknown) {
       const message =

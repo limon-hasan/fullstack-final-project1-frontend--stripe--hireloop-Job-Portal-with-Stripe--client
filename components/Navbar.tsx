@@ -11,6 +11,7 @@ import {
   MenuIcon,
   Settings,
   UserIcon,
+  UserRound,
   XIcon,
 } from "lucide-react"
 
@@ -52,6 +53,7 @@ function Navbar() {
   const userImage = user?.imageUrl || user?.image
   const dashboardHref = `/dashboard/${session?.user.role || "seeker"}`
   const settingsHref = `${dashboardHref}/settings`
+  const profileHref = `${dashboardHref}/profile`
 
   const handleSignOut = async () => {
     await authClient.signOut()
@@ -155,6 +157,13 @@ function Navbar() {
                   >
                     <LayoutDashboard className="h-4 w-4 text-zinc-400" />
                     Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    render={<Link href={profileHref} />}
+                    className="gap-2.5 px-2 py-2 text-[13px] focus:bg-white/[0.06] focus:text-white"
+                  >
+                    <UserRound className="h-4 w-4 text-zinc-400" />
+                    My profile
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     render={<Link href="/browse-jobs" />}

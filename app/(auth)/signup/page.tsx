@@ -115,7 +115,6 @@ export default function SignUpPage() {
         password: formData.password,
         image: imageUrl || undefined,
         role: formData.role,
-        callbackURL: "/",
       })
 
       if (error) {
@@ -127,7 +126,11 @@ export default function SignUpPage() {
       }
 
       console.log("Sign up successful:", signUpData)
-      router.push("/")
+      const dest =
+        formData.role === "recruiter"
+          ? "/dashboard/recruiter"
+          : "/dashboard/seeker"
+      router.push(dest)
       router.refresh()
     } catch (err: unknown) {
       console.error("SignUp catch error:", err)
