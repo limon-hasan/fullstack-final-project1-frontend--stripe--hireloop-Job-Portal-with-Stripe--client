@@ -4,7 +4,6 @@ import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { toast } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
 
 interface ThemeToggleProps {
@@ -23,12 +22,7 @@ export function ThemeToggle({ className, showLabel = false }: ThemeToggleProps) 
   const isDark = !mounted || resolvedTheme === "dark"
 
   const handleToggle = () => {
-    const nextTheme = isDark ? "light" : "dark"
-    setTheme(nextTheme)
-    toast.add({
-      title: nextTheme === "light" ? "Light theme enabled" : "Dark theme enabled",
-      description: "Press D anytime to switch themes.",
-    })
+    setTheme(isDark ? "light" : "dark")
   }
 
   return (
