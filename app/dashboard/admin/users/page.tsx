@@ -3,6 +3,19 @@ import { PageHeader } from "@/components/shared/page-header"
 import type { AdminUser, UserRole } from "@/types/users"
 import { UsersTable } from "./_components/users-table"
 import { getUsers } from "@/lib/api/users"
+
+interface RawUser {
+  _id: string
+  name?: string | null
+  email?: string | null
+  image?: string | null
+  role?: string | null
+  emailVerified?: boolean
+  banned?: boolean
+  banReason?: string | null
+  createdAt?: string | Date
+}
+
 function normalizeRole(role?: string | null): UserRole {
   if (role === "admin" || role === "recruiter" || role === "seeker") {
     return role
@@ -12,9 +25,11 @@ function normalizeRole(role?: string | null): UserRole {
 
 export default async function AdminUsersPage() {
   const response = await getUsers()
-  const rawUsers = Array.isArray(response) ? response : (response?.users ?? [])
+  const rawUsers: RawUser[] = Array.isArray(response)
+    ? response
+    : (response?.users ?? [])
 
-  const users: AdminUser[] = rawUsers.map((user) => ({
+  const users: AdminUser[] = rawUsers.map((user: RawUser) => ({
     id: String(user._id),
     name: user.name ?? "",
     email: user.email ?? "",

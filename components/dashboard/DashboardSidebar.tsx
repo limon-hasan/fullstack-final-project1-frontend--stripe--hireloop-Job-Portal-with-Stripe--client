@@ -1,18 +1,20 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
-  LayoutDashboard,
-  Briefcase,
   Bookmark,
-  FileText,
+  Briefcase,
+  Building2,
   CreditCard,
+  ExternalLink,
+  FileText,
+  Home,
+  LayoutDashboard,
+  LogOut,
+  PlusCircle,
   Settings,
   Users,
-  Building2,
-  PlusCircle,
-  Home,
 } from "lucide-react"
 
 import {
@@ -20,12 +22,15 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { authClient } from "@/lib/auth-client"
+import { getInitials } from "@/lib/format"
+import { cn } from "@/lib/utils"
 import type { UserRole } from "@/types/auth"
 import type { MenuItem } from "@/types/navigation"
 
@@ -34,17 +39,16 @@ export type { MenuItem } from "@/types/navigation"
 
 export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
   seeker: [
-    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
-      name: "Dashboard",
+      name: "Overview",
       url: "/dashboard/seeker",
       icon: LayoutDashboard,
     },
-    { id: "jobs", name: "Jobs", url: "/jobs", icon: Briefcase },
+    { id: "jobs", name: "Browse jobs", url: "/browse-jobs", icon: Briefcase },
     {
       id: "saved-jobs",
-      name: "Saved Jobs",
+      name: "Saved jobs",
       url: "/dashboard/seeker/saved-jobs",
       icon: Bookmark,
     },
@@ -68,10 +72,9 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
     },
   ],
   recruiter: [
-    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
-      name: "Dashboard",
+      name: "Overview",
       url: "/dashboard/recruiter",
       icon: LayoutDashboard,
     },
@@ -79,17 +82,17 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
       id: "manage-company",
       name: "My company",
       url: "/dashboard/recruiter/company",
-      icon: Briefcase,
+      icon: Building2,
     },
     {
       id: "manage-jobs",
-      name: "Manage Jobs",
+      name: "Manage jobs",
       url: "/dashboard/recruiter/jobs",
       icon: Briefcase,
     },
     {
       id: "add-job",
-      name: "Add Job",
+      name: "Post a job",
       url: "/dashboard/recruiter/jobs/new",
       icon: PlusCircle,
     },
@@ -107,10 +110,9 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
     },
   ],
   admin: [
-    { id: "home", name: "Home", url: "/", icon: Home },
     {
       id: "dashboard",
-      name: "Dashboard",
+      name: "Overview",
       url: "/dashboard/admin",
       icon: LayoutDashboard,
     },
@@ -137,8 +139,42 @@ export const menuItemsbyRole: Record<UserRole, MenuItem[]> = {
   ],
 }
 
+const ROLE_META: Record<
+  UserRole,
+  { label: string; workspace: string; accent: string }
+> = {
+  seeker: {
+    label: "Job seeker",
+    workspace: "Seeker workspace",
+    accent: "border-emerald-500/25 bg-emerald-500/10 text-emerald-300",
+  },
+  recruiter: {
+    label: "Recruiter",
+    workspace: "Recruiter workspace",
+    accent: "border-[#5b4df5]/30 bg-[#5b4df5]/15 text-[#b7afff]",
+  },
+  admin: {
+    label: "Administrator",
+    workspace: "Admin console",
+    accent: "border-amber-500/25 bg-amber-500/10 text-amber-300",
+  },
+}
+
+function isRouteActive(pathname: string, url: string) {
+  if (url === "/dashboard/seeker" || url === "/dashboard/recruiter") {
+    return pathname === url
+  }
+
+  if (url === "/dashboard/admin") {
+    return pathname === url
+  }
+
+  return pathname === url || pathname.startsWith(`${url}/`)
+}
+
 export function DashboardSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = authClient.useSession()
 
   const roleFromPath: UserRole | null = pathname.includes("/admin")
@@ -154,90 +190,140 @@ export function DashboardSidebar() {
   const currentMenu = menuItemsbyRole[role] || menuItemsbyRole.seeker
 
   const user = session?.user as
-    | (NonNullable<typeof session>["user"] & { imageUrl?: string | null })
+    | (NonNullable<typeof session>["user"] & {
+        imageUrl?: string | null
+        premium?: boolean
+      })
     | undefined
 
-  const userName = user?.name || "User"
-  const roleLabel = role.charAt(0).toUpperCase() + role.slice(1)
+  const userName = user?.name || "Your account"
+  const userEmail = user?.email || "Sign in to sync your activity"
   const userImage = user?.imageUrl || user?.image
-  const userInitial = userName.charAt(0).toUpperCase()
+  const meta = ROLE_META[role]
+
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    router.push("/")
+    router.refresh()
+  }
 
   return (
-    <Sidebar className="flex flex-col justify-between border-r border-white/[0.08] bg-[#0c0d12] text-white">
-      <div>
-        {/* ১. লোগো ও ইউজারের নাম + রোল হেডার */}
-        <SidebarHeader className="px-5 pt-6 pb-2">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold tracking-tight text-white">
-              hire<span className="text-amber-500">loop</span>
-            </span>
-          </Link>
+    <Sidebar className="border-r border-white/[0.07] bg-[#0a0b0f] text-white">
+      <SidebarHeader className="px-4 pt-5 pb-2">
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-1 outline-none focus-visible:ring-2 focus-visible:ring-[#5b4df5]/60"
+        >
+          <span className="text-[22px] font-bold tracking-tight text-white">
+            hire<span className="text-amber-500">loop</span>
+          </span>
+        </Link>
+        <p className="mt-1 px-1 text-[11px] font-medium tracking-[0.14em] text-zinc-500 uppercase">
+          {meta.workspace}
+        </p>
+      </SidebarHeader>
 
-          <div className="mt-4 flex flex-col gap-2 rounded-xl border border-white/5 bg-[#15161f] p-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-sm font-semibold text-white">
-                {userImage ? (
-                  <img
-                    src={userImage}
-                    alt={userName}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  userInitial
-                )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[13.5px] font-semibold text-white">
-                  {userName}
-                </p>
-                <p className="text-[11.5px] text-zinc-400">{roleLabel}</p>
-              </div>
+      <SidebarContent className="px-3">
+        <SidebarGroup>
+          <SidebarGroupLabel className="px-2 text-[10px] font-semibold tracking-[0.16em] text-zinc-600 uppercase">
+            Workspace
+          </SidebarGroupLabel>
+          <SidebarMenu className="gap-1">
+            {currentMenu.map((item) => {
+              const Icon = item.icon
+              const isActive = isRouteActive(pathname, item.url)
+
+              return (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    isActive={isActive}
+                    render={<Link href={item.url} />}
+                    className={cn(
+                      "group relative flex h-10 w-full flex-row items-center gap-3 rounded-lg px-3 text-[13.5px] font-medium text-zinc-400 transition-colors hover:bg-white/[0.04] hover:text-white data-[active=true]:bg-white/[0.06] data-[active=true]:text-white"
+                    )}
+                  >
+                    {isActive && (
+                      <span className="absolute top-1/2 left-0 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[#6a5cff]" />
+                    )}
+                    <Icon className="h-[17px] w-[17px] shrink-0 text-zinc-500 transition-colors group-hover:text-white group-data-[active=true]:text-[#b7afff]" />
+                    <span className="truncate">{item.name}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup className="mt-2">
+          <SidebarGroupLabel className="px-2 text-[10px] font-semibold tracking-[0.16em] text-zinc-600 uppercase">
+            Shortcuts
+          </SidebarGroupLabel>
+          <SidebarMenu className="gap-1">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                render={<Link href="/" />}
+                className="flex h-10 w-full flex-row items-center gap-3 rounded-lg px-3 text-[13.5px] font-medium text-zinc-400 transition-colors hover:bg-white/[0.04] hover:text-white"
+              >
+                <Home className="h-[17px] w-[17px] shrink-0 text-zinc-500" />
+                Market home
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                render={<Link href="/browse-jobs" />}
+                className="flex h-10 w-full flex-row items-center gap-3 rounded-lg px-3 text-[13.5px] font-medium text-zinc-400 transition-colors hover:bg-white/[0.04] hover:text-white"
+              >
+                <ExternalLink className="h-[17px] w-[17px] shrink-0 text-zinc-500" />
+                Public job board
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="border-t border-white/[0.06] p-3">
+        <div className="rounded-xl border border-white/[0.07] bg-[#101116] p-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.08] bg-[#191a22] text-[11px] font-semibold text-zinc-200">
+              {userImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={userImage}
+                  alt={userName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                getInitials(userName, userEmail)
+              )}
             </div>
 
-            {role === "recruiter" && (
-              <div>
-                <span className="inline-block rounded-full border border-[#483d8b]/40 bg-[#23203f] px-2.5 py-0.5 text-[11px] font-medium text-[#9d8df1]">
-                  Premium account
-                </span>
-              </div>
-            )}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-semibold text-white">
+                {userName}
+              </p>
+              <p className="truncate text-[11px] text-zinc-500">{userEmail}</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSignOut}
+              title="Sign out"
+              aria-label="Sign out"
+              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-rose-300"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
           </div>
-        </SidebarHeader>
 
-        {/* ২. মেনু আইটেম লিস্ট */}
-        <SidebarContent className="mt-3 px-3">
-          <SidebarGroup>
-            <SidebarMenu className="gap-1.5">
-              {currentMenu.map((item) => {
-                const Icon = item.icon
-                const isActive = pathname === item.url
-
-                return (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      isActive={isActive}
-                      render={<Link href={item.url} />}
-                      className="group relative flex w-full flex-row items-center gap-3.5 rounded-lg px-3.5 py-2.5 text-[14px] font-medium text-zinc-400 transition-colors hover:bg-white/5 hover:text-white data-[active=true]:bg-[#1a1b26] data-[active=true]:text-white"
-                    >
-                      {isActive && (
-                        <span className="absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r bg-[#6366f1]" />
-                      )}
-                      <Icon className="h-[18px] w-[18px] shrink-0 text-zinc-400 group-hover:text-white group-data-[active=true]:text-white" />
-                      <span>{item.name}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
-      </div>
-
-      {/* ৩. সাইডবার ফুটার */}
-      <SidebarFooter className="border-t border-white/5 p-4">
-        <p className="truncate text-xs font-medium text-[#f59e0b] transition-colors hover:text-[#fbbf24]">
-          {session?.user?.email || "maksudulhasanlimon@gmail.com"}
-        </p>
+          <span
+            className={cn(
+              "mt-2.5 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium",
+              meta.accent
+            )}
+          >
+            {meta.label}
+          </span>
+        </div>
       </SidebarFooter>
     </Sidebar>
   )

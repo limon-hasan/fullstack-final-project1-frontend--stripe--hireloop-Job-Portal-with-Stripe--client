@@ -1,6 +1,8 @@
 "use client"
-import { Trash2Icon } from "lucide-react"
+
+import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Loader2, Trash2Icon } from "lucide-react"
 
 import {
   AlertDialog,
@@ -15,32 +17,56 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { deleteJob } from "@/lib/actions/jobs"
-import { useState } from "react"
 import { toast } from "@/components/ui/toast"
+import { deleteJob } from "@/lib/actions/jobs"
 import type { ManagedJob } from "@/types/jobs"
 
 export function DeleteJobDialog({ job }: { job: ManagedJob }) {
   const [open, setOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
-  const handleDelete = async () => {
-    const res = await deleteJob(job._id)
-    console.log(job._id, res)
-    if (res.deletedCount) {
+
+  const handleDelete = async (event: React.MouseEvent) => {
+    event.preventDefault()
+    setIsDeleting(true)
+
+    try {
+      const result = await deleteJob(job._id)
+
+      if (!result?.deletedCount) {
+        throw new Error("The listing could not be deleted. Please try again.")
+      }
+
       setOpen(false)
       toast.add({
         title: "Job deleted",
-        description: `The job has been permanently deleted`,
+        description: `${job.title} has been permanently removed.`,
       })
+      router.push("/dashboard/recruiter/jobs")
       router.refresh()
+    } catch (error) {
+      toast.add({
+        title: "Could not delete job",
+        description:
+          error instanceof Error ? error.message : "Please try again.",
+      })
+    } finally {
+      setIsDeleting(false)
     }
   }
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger
         render={
-          <Button variant="destructive">
-            <Trash2Icon />{" "}
+          <Button
+            variant="destructive"
+            size="icon"
+            title="Delete job"
+            aria-label={`Delete ${job.title}`}
+            className="h-8 w-8 rounded-lg"
+          >
+            <Trash2Icon className="h-3.5 w-3.5" />
           </Button>
         }
       />
@@ -49,16 +75,23 @@ export function DeleteJobDialog({ job }: { job: ManagedJob }) {
           <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
             <Trash2Icon />
           </AlertDialogMedia>
-          <AlertDialogTitle>Delete job?</AlertDialogTitle>
+          <AlertDialogTitle>Delete this job?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete this chat conversation. View{" "}
-            <a href="#">Settings</a> delete any memories saved during this chat.
+            This permanently deletes <strong>{job.title}</strong> and removes it
+            from the public job board. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} variant="destructive">
-            Delete
+          <AlertDialogCancel variant="outline" disabled={isDeleting}>
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDelete}
+            variant="destructive"
+            disabled={isDeleting}
+          >
+            {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isDeleting ? "Deleting…" : "Delete job"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

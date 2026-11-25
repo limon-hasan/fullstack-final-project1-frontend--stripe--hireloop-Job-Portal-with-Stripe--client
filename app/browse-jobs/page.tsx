@@ -1,100 +1,70 @@
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import type { Metadata } from "next"
+import { Suspense } from "react"
+
 import { getJobs } from "@/lib/api/jobs"
-import { JobSearchBar } from "@/app/browse-jobs/components/JobSearchBar"
-import { JobFiltersSidebar } from "@/app/browse-jobs/components/JobFiltersSidebar"
-import { JobCard } from "@/app/browse-jobs/components/JobCard"
-import { JobSortSelect } from "@/app/browse-jobs/components/JobSortSelect"
+import { BrowseJobsClient } from "./components/BrowseJobsClient"
+
+export const metadata: Metadata = {
+  title: "Browse jobs",
+  description:
+    "Explore curated roles from verified employers. Filter by category, work mode, salary and location.",
+}
 
 interface BrowseJobsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+function BrowseJobsSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="h-[68px] animate-pulse rounded-2xl border border-white/[0.06] bg-[#0d0e12]" />
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <div className="hidden h-[420px] w-64 shrink-0 animate-pulse rounded-2xl border border-white/[0.06] bg-[#0d0e12] lg:block xl:w-72" />
+        <div className="flex-1 space-y-3.5">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={index}
+              className="h-[126px] animate-pulse rounded-2xl border border-white/[0.06] bg-[#0d0e12]"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const BrowseJobsPage = async ({ searchParams }: BrowseJobsPageProps) => {
   const search = await searchParams
-  const urlSearch = new URLSearchParams(search as Record<string, string>)
-  const query = urlSearch.toString()
 
-  const jobs = await getJobs(query)
+  const apiParams = new URLSearchParams()
+  if (typeof search.search === "string" && search.search) {
+    apiParams.set("search", search.search)
+  }
+  if (typeof search.location === "string" && search.location) {
+    apiParams.set("location", search.location)
+  }
+
+  const jobs = await getJobs(apiParams.toString())
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        {/* Top Search Bar */}
-        <JobSearchBar />
-
-        {/* Main Content Grid */}
-        <div className="flex flex-col items-start gap-6 lg:flex-row">
-          {/* Left Filters Sidebar */}
-          <JobFiltersSidebar />
-
-          {/* Right Results Section */}
-          <section className="w-full flex-1 space-y-4">
-            {/* Results Header */}
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-              <h1 className="text-lg font-semibold text-white">
-                Found {jobs.length} Professional Jobs
-              </h1>
-
-              <JobSortSelect />
-            </div>
-
-            {/* Job Cards List */}
-            {jobs.length > 0 ? (
-              <div className="space-y-3.5">
-                {jobs.map((job) => (
-                  <JobCard key={job._id} job={job} />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-xl border border-zinc-800/80 bg-[#131417] p-12 text-center">
-                <p className="text-sm font-medium text-zinc-300">
-                  No jobs matched your current criteria
-                </p>
-                <p className="mt-1 text-xs text-zinc-500">
-                  Try adjusting your search keywords or filter selections.
-                </p>
-              </div>
-            )}
-
-            {/* Pagination Shell */}
-            {jobs.length > 0 && (
-              <div className="flex items-center justify-center gap-1.5 pt-4">
-                <button
-                  type="button"
-                  aria-label="Previous page"
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-zinc-800 bg-[#131417] text-zinc-400 hover:border-zinc-700 hover:text-white"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-white text-xs font-semibold text-black"
-                >
-                  1
-                </button>
-                <button
-                  type="button"
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-zinc-800 bg-[#131417] text-xs text-zinc-400 hover:border-zinc-700 hover:text-white"
-                >
-                  2
-                </button>
-                <button
-                  type="button"
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-zinc-800 bg-[#131417] text-xs text-zinc-400 hover:border-zinc-700 hover:text-white"
-                >
-                  3
-                </button>
-                <button
-                  type="button"
-                  aria-label="Next page"
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-zinc-800 bg-[#131417] text-zinc-400 hover:border-zinc-700 hover:text-white"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            )}
-          </section>
+        <div className="max-w-2xl">
+          <p className="text-[11px] font-semibold tracking-[0.18em] text-[#8b81ff] uppercase">
+            The board
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            Browse open roles
+          </h1>
+          <p className="mt-2 text-sm text-zinc-400">
+            Transparent salaries, verified employers and filters that actually
+            work. Save anything that looks interesting.
+          </p>
         </div>
+
+        <Suspense fallback={<BrowseJobsSkeleton />}>
+          <BrowseJobsClient jobs={jobs} />
+        </Suspense>
       </div>
     </main>
   )

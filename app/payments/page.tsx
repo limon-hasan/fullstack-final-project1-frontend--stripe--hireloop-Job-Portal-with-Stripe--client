@@ -1,5 +1,5 @@
-const PaymentsPage = () => {
-  return <div>Payment Page</div>
-}
+import { redirect } from "next/navigation"
 
-export default PaymentsPage
+export default function PaymentsPage() {
+  redirect("/dashboard/seeker/billing")
+}

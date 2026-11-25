@@ -1,11 +1,12 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
+import { SiteFooter } from "@/components/SiteFooter"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils"
 import { Navbar } from "@/components/Navbar"
 import { Toaster } from "@/components/ui/toast"
+import { cn } from "@/lib/utils"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -18,9 +19,39 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "HireLoop | Find Your Dream Job Today",
+  title: {
+    default: "HireLoop | Find your next role, faster",
+    template: "%s | HireLoop",
+  },
   description:
-    "HireLoop connects top talent with world-class companies. Browse curated opportunities and land your next role.",
+    "HireLoop connects top talent with world-class companies. Browse curated opportunities, track every application and land your next role faster.",
+  applicationName: "HireLoop",
+  keywords: [
+    "jobs",
+    "hiring",
+    "careers",
+    "recruiting",
+    "remote jobs",
+    "job board",
+  ],
+  openGraph: {
+    title: "HireLoop | Find your next role, faster",
+    description:
+      "Curated roles, transparent salaries and application tracking that keeps everyone moving.",
+    siteName: "HireLoop",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HireLoop | Find your next role, faster",
+    description:
+      "Curated roles, transparent salaries and application tracking that keeps everyone moving.",
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#08080a",
+  colorScheme: "dark",
 }
 
 export default function RootLayout({
@@ -38,6 +69,7 @@ export default function RootLayout({
         <ThemeProvider>
           <Navbar />
           {children}
+          <SiteFooter />
           <Toaster />
         </ThemeProvider>
       </body>

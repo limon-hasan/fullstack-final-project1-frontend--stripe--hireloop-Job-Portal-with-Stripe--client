@@ -12,6 +12,7 @@ interface PageHeaderProps {
   title: string
   description?: string
   action?: React.ReactNode
+  eyebrow?: string
 }
 
 export function PageHeader({
@@ -19,20 +20,21 @@ export function PageHeader({
   title,
   description,
   action,
+  eyebrow,
 }: PageHeaderProps) {
   return (
-    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-      <div>
-        <div className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-zinc-400">
+    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div className="min-w-0">
+        <div className="mb-2 flex flex-wrap items-center gap-1.5 text-[11px] font-medium tracking-wide text-zinc-500">
           {breadcrumbs.map((item, index) => (
             <Fragment key={`${item.label}-${index}`}>
               {index > 0 && (
-                <ChevronRight className="h-3.5 w-3.5 text-zinc-600" />
+                <ChevronRight className="h-3 w-3 text-zinc-700" />
               )}
               {item.href ? (
                 <Link
                   href={item.href}
-                  className="transition-colors hover:text-white"
+                  className="transition-colors hover:text-zinc-200"
                 >
                   {item.label}
                 </Link>
@@ -40,7 +42,7 @@ export function PageHeader({
                 <span
                   className={
                     index === breadcrumbs.length - 1
-                      ? "text-[#7c73f8]"
+                      ? "text-[#a99fff]"
                       : undefined
                   }
                 >
@@ -50,14 +52,23 @@ export function PageHeader({
             </Fragment>
           ))}
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+
+        {eyebrow && (
+          <p className="mb-1 text-[11px] font-semibold tracking-[0.16em] text-[#8b81ff] uppercase">
+            {eyebrow}
+          </p>
+        )}
+
+        <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-[28px]">
           {title}
         </h1>
         {description && (
-          <p className="mt-1 text-sm text-zinc-400">{description}</p>
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-400">
+            {description}
+          </p>
         )}
       </div>
-      {action}
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   )
 }

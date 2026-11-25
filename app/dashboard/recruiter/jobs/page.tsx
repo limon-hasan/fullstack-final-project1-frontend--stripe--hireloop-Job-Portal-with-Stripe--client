@@ -238,14 +238,14 @@ export default async function ManageJobsPage() {
                           <FileText className="h-4 w-4" />
                         </Link>
 
-                        <button
-                          type="button"
+                        <Link
+                          href={`/dashboard/recruiter/jobs/${job._id}/edit`}
                           title="Update Job"
                           aria-label="Update Job"
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-[#191a21] text-zinc-300 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                         >
                           <Pencil className="h-3.5 w-3.5" />
-                        </button>
+                        </Link>
 
                         <DeleteJobDialog job={job} />
                       </div>

@@ -1,18 +1,23 @@
 "use client"
 
 import { useState } from "react"
-import {  useRouter } from "next/navigation"
-import { authClient } from "@/lib/auth-client"
-import { createApplication } from "@/lib/actions/applications"
-import type { ManagedJob } from "@/types/jobs"
-import type { JobApplicationPayload } from "@/types/applications"
-import { getApplicationsCount } from "@/lib/api/applications"
+import { useRouter } from "next/navigation"
+import { Loader2, Lock, Send } from "lucide-react"
+
+import { BrandButton } from "@/components/shared/brand-button"
 import { toast } from "@/components/ui/toast"
+import { createApplication } from "@/lib/actions/applications"
+import { getApplicationsCount } from "@/lib/api/applications"
 import { getUserPremiumbyId } from "@/lib/api/users"
+import { authClient } from "@/lib/auth-client"
+import type { JobApplicationPayload } from "@/types/applications"
+import type { ManagedJob } from "@/types/jobs"
 
 interface ApplyJobButtonProps {
   job: ManagedJob
 }
+
+const FREE_APPLICATION_LIMIT = 2
 
 export const ApplyJobButton = ({ job }: ApplyJobButtonProps) => {
   const { data: session } = authClient.useSession()
@@ -26,69 +31,106 @@ export const ApplyJobButton = ({ job }: ApplyJobButtonProps) => {
       return
     }
 
-    if (user.role === "seeker") {
-      // is premum user
-      const premimumResult = await getUserPremiumbyId(user.id)
-      console.log("Premium user: ", premimumResult)
+    if (user.role !== "seeker") {
+      toast.add({
+        title: "Seeker account required",
+        description:
+          "Only job seeker accounts can apply. Switch your role from account settings or create a seeker profile.",
+      })
+      return
+    }
 
-      // number of jobs applied by the user
-      const countResult = await getApplicationsCount(`userId=${user.id}`)
+    try {
+      setIsSubmitting(true)
 
-      // less more than 2 and not premium user
-      if (!premimumResult.premium && countResult.count >= 2) {
-        // redirect to the payment page
-        router.push(`/checkout`)
+      const [premiumResult, countResult] = await Promise.all([
+        getUserPremiumbyId(user.id),
+        getApplicationsCount(`userId=${user.id}`),
+      ])
+
+      if (
+        !premiumResult.premium &&
+        countResult.count >= FREE_APPLICATION_LIMIT
+      ) {
+        toast.add({
+          title: "You have reached the free limit",
+          description:
+            "Upgrade to HireLoop Pro for unlimited applications across every listing.",
+        })
+        router.push("/checkout")
         return
-      } else {
-        try {
-          setIsSubmitting(true)
-
-          const application: JobApplicationPayload = {
-            jobId: job._id,
-            userId: user.id,
-            applicantName: user.name || "Job Seeker",
-            applicantEmail: user.email,
-            jobTitle: job.title,
-            companyName: job.companyName,
-            location: job.location || "Remote",
-            isRemote: Boolean(job.isRemote),
-            jobType: job.jobType || "Full-time",
-            minSalary: job.minSalary,
-            maxSalary: job.maxSalary,
-            status: "Pending",
-            appliedAt: new Date().toISOString(),
-          }
-
-          const res = await createApplication(application)
-          console.log("Job application result: ", res)
-          if (res.insertedId) {
-            console.log("Application submitted successfully")
-            toast.add({
-              title: "Application is submitted",
-              description: "Your application has been submitted successfully!",
-            })
-            router.push("/dashboard/seeker/applications")
-            router.refresh()
-          }
-        } catch (error) {
-          console.error("Failed to submit application:", error)
-        } finally {
-          setIsSubmitting(false)
-        }
       }
-    } else {
-      console.log("User is not a job seeker")
+
+      const application: JobApplicationPayload = {
+        jobId: job._id,
+        userId: user.id,
+        applicantName: user.name || "Job Seeker",
+        applicantEmail: user.email,
+        jobTitle: job.title,
+        companyName: job.companyName,
+        location: job.location || "Remote",
+        isRemote: Boolean(job.isRemote),
+        jobType: job.jobType || "Full-time",
+        minSalary: job.minSalary,
+        maxSalary: job.maxSalary,
+        status: "Pending",
+        appliedAt: new Date().toISOString(),
+      }
+
+      const res = await createApplication(application)
+
+      if (res?.insertedId) {
+        toast.add({
+          title: "Application submitted",
+          description:
+            "Your application is in. Track every update from your dashboard.",
+        })
+        router.push("/dashboard/seeker/applications")
+        router.refresh()
+        return
+      }
+
+      toast.add({
+        title: "Could not submit application",
+        description: "Please try again in a moment.",
+      })
+    } catch (error) {
+      console.error("Failed to submit application:", error)
+      toast.add({
+        title: "Application failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong while applying. Please try again.",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <button
+    <BrandButton
       onClick={handleApplyNow}
       disabled={isSubmitting}
       type="button"
-      className="cursor-pointer rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
+      className="w-full sm:w-auto"
     >
-      {isSubmitting ? "Applying..." : "Apply Now"}
-    </button>
+      {isSubmitting ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Applying...
+        </>
+      ) : user ? (
+        <>
+          <Send className="mr-2 h-4 w-4" />
+          Apply now
+        </>
+      ) : (
+        <>
+          <Lock className="mr-2 h-4 w-4" />
+          Sign in to apply
+        </>
+      )}
+    </BrandButton>
   )
 }

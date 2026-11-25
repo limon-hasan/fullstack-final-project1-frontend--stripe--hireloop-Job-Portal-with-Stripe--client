@@ -1,71 +1,58 @@
 "use client"
 
-import React from "react"
 import { Check } from "lucide-react"
+
 import type { FilterOption } from "@/lib/constants/jobs"
-// import { router } from "better-auth/api"
-import { useRouter } from "next/navigation"
 
 interface FilterCheckboxGroupProps {
   title: string
   name: string
   options: FilterOption[]
-  selectedValue: string
-  onChange: (name: string, value: string, checked: boolean) => void
+  selectedValues: string[]
+  onToggle: (name: string, value: string) => void
 }
 
 export const FilterCheckboxGroup = ({
   title,
   name,
   options,
-  selectedValue,
-  onChange,
+  selectedValues,
+  onToggle,
 }: FilterCheckboxGroupProps) => {
-  const router = useRouter()
-  const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(name, e.target.value, "Checked")
-    onChange(name, e.target.value, e.target.checked)
-
-    const params = new URLSearchParams(window.location.search)
-    params.set(name, e.target.value)
-    router.push(`/browse-jobs?${params.toString()}`)
-  }
-
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-zinc-200">{title}</h3>
+      <h3 className="text-[12px] font-semibold tracking-wide text-zinc-300">
+        {title}
+      </h3>
 
-      <div className="space-y-2.5">
+      <div className="space-y-1">
         {options.map((option) => {
           const id = `${name}-${option.value}`
-          const isChecked = selectedValue === option.value
+          const isChecked = selectedValues.includes(option.value)
 
           return (
             <label
               key={option.value}
               htmlFor={id}
-              className="group flex cursor-pointer items-center gap-3 select-none"
+              className="group flex cursor-pointer items-center gap-2.5 rounded-lg px-1.5 py-1.5 select-none hover:bg-white/[0.03]"
             >
-              <div className="relative flex items-center justify-center">
+              <span className="relative flex items-center justify-center">
                 <input
                   id={id}
                   type="checkbox"
                   name={name}
                   value={option.value}
-                  onChange={handleCheckBoxChange}
+                  onChange={() => onToggle(name, option.value)}
                   checked={isChecked}
-                  //   onChange={(e) =>
-                  //     onChange(name, option.value, e.target.checked)
-                  //   }
-                  className="peer h-4 w-4 appearance-none rounded border border-zinc-700 bg-transparent transition-colors group-hover:border-zinc-500 checked:border-white checked:bg-white"
+                  className="peer h-4 w-4 appearance-none rounded border border-white/20 bg-transparent transition-colors group-hover:border-white/40 checked:border-[#6a5cff] checked:bg-[#5b4df5]"
                 />
                 <Check
-                  className="pointer-events-none absolute h-3 w-3 text-black opacity-0 transition-opacity peer-checked:opacity-100"
+                  className="pointer-events-none absolute h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100"
                   strokeWidth={3}
                 />
-              </div>
+              </span>
 
-              <span className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-200">
+              <span className="text-[12.5px] text-zinc-400 transition-colors group-hover:text-zinc-200">
                 {option.label}
               </span>
             </label>

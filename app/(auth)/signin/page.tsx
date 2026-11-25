@@ -15,10 +15,9 @@ import {
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button"
 import { authClient } from "@/lib/auth-client"
 
-export default function SignInPage() {
+function SignInContent() {
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get("redirectTo") ?? "/"
-  console.log("redirect to: ", redirectTo)
 
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -146,5 +145,13 @@ export default function SignInPage() {
         linkLabel="Sign up"
       />
     </AuthLayout>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <React.Suspense fallback={<div className="min-h-screen bg-[#0c0d12]" />}>
+      <SignInContent />
+    </React.Suspense>
   )
 }

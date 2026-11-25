@@ -1,98 +1,119 @@
 "use client"
 
-import { Banknote, Bookmark, Building2, Clock, Globe, Tag } from "lucide-react"
+import Link from "next/link"
+import { Bookmark, Building2, Clock, Globe, MapPin, Tag } from "lucide-react"
+
+import { toast } from "@/components/ui/toast"
+import { useSavedJobs } from "@/hooks/use-saved-jobs"
+import { formatRelativeTime, formatSalary } from "@/lib/format"
+import { cn } from "@/lib/utils"
 import type { ManagedJob } from "@/types/jobs"
-import { useRouter } from "next/navigation"
 
 interface JobCardProps {
   job: ManagedJob
 }
 
-const formatSalary = (min?: number, max?: number) => {
-  if (!min && !max) return "Negotiable"
-  const formatNum = (n: number) =>
-    n >= 1000 ? `$${Math.round(n / 1000)}k` : `$${n}`
-
-  if (min && max) return `${formatNum(min)} - ${formatNum(max)}`
-  return formatNum(min || max || 0)
-}
-
 export const JobCard = ({ job }: JobCardProps) => {
-  const router = useRouter()
+  const { isSaved, toggleSaved } = useSavedJobs()
+  const saved = isSaved(job._id)
 
-  const handleViewJobDetails = (jobId: string) => {
-    router.push(`/browse-jobs/${jobId}`)
-  }
+  const handleBookmark = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    const added = toggleSaved(job)
 
-  const handleBookmarkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation() // যাতে বুকমার্কে ক্লিক করলে ডিটেইলস পেজে চলে না যায়
-    // TODO: Implement save/bookmark job action
+    toast.add({
+      title: added ? "Saved to your list" : "Removed from saved jobs",
+      description: added
+        ? `${job.title} is now in your saved jobs.`
+        : `${job.title} was removed from your saved jobs.`,
+    })
   }
 
   return (
-    <article
-      onClick={() => handleViewJobDetails(job._id)}
-      className="group cursor-pointer rounded-xl border border-zinc-800/80 bg-[#131417] p-5 transition-colors hover:border-zinc-700"
-    >
-      <div className="flex items-start justify-between gap-4">
+    <article className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0d0e12] transition-all hover:border-white/[0.14] hover:bg-[#101116]">
+      <Link
+        href={`/browse-jobs/${job._id}`}
+        className="block p-5 pr-16 outline-none focus-visible:ring-2 focus-visible:ring-[#5b4df5]/60"
+      >
         <div className="flex items-start gap-4">
-          {/* Company Logo Placeholder */}
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-zinc-800 bg-[#1A1C21] text-zinc-400">
-            <Building2 className="h-5 w-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-[linear-gradient(135deg,#1b1c24,#121318)] text-[#b7afff]">
+            {job.companyName ? (
+              <span className="text-sm font-semibold">
+                {job.companyName.charAt(0).toUpperCase()}
+              </span>
+            ) : (
+              <Building2 className="h-5 w-5" />
+            )}
           </div>
 
-          {/* Job Info */}
-          <div>
-            <h3 className="text-base font-semibold text-white transition-colors group-hover:text-zinc-200">
-              {job.title}
-            </h3>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="truncate text-[15px] font-semibold text-white transition-colors group-hover:text-white">
+                {job.title}
+              </h3>
+              {job.isRemote && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300">
+                  <Globe className="h-2.5 w-2.5" />
+                  Remote
+                </span>
+              )}
+            </div>
 
-            <p className="mt-0.5 text-sm text-zinc-400">
-              {job.companyName} • {job.location}
-              {job.isRemote ? " (Remote)" : ""}
+            <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[12.5px] text-zinc-400">
+              <span className="font-medium text-zinc-300">
+                {job.companyName || "Company"}
+              </span>
+              <span className="text-zinc-600">•</span>
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="h-3 w-3 text-zinc-500" />
+                {job.location || "Not specified"}
+              </span>
             </p>
 
-            {/* Metadata Pills */}
             <div className="mt-3.5 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#1A1C21] px-2.5 py-1 text-xs text-zinc-300">
-                <Banknote className="h-3.5 w-3.5 text-zinc-400" />
-                {formatSalary(job.minSalary, job.maxSalary)}
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.07] bg-[#14151b] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                {formatSalary(job.minSalary, job.maxSalary, job.frequency)}
               </span>
 
               {job.jobType && (
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#1A1C21] px-2.5 py-1 text-xs text-zinc-300">
-                  <Clock className="h-3.5 w-3.5 text-zinc-400" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.07] bg-[#14151b] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                  <Clock className="h-3 w-3 text-zinc-500" />
                   {job.jobType}
                 </span>
               )}
 
               {job.category && (
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#1A1C21] px-2.5 py-1 text-xs text-zinc-300">
-                  <Tag className="h-3.5 w-3.5 text-zinc-400" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.07] bg-[#14151b] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                  <Tag className="h-3 w-3 text-zinc-500" />
                   {job.category}
-                </span>
-              )}
-
-              {job.isRemote && (
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400">
-                  <Globe className="h-3.5 w-3.5" />
-                  Remote
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Bookmark Action */}
-        <button
-          type="button"
-          onClick={handleBookmarkClick}
-          aria-label="Bookmark job"
-          className="cursor-pointer rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
-        >
-          <Bookmark className="h-4 w-4" />
-        </button>
-      </div>
+        {job.postedLabel && (
+          <p className="mt-3 pl-[60px] text-[11px] text-zinc-500">
+            {formatRelativeTime(job.postedLabel)}
+          </p>
+        )}
+      </Link>
+
+      <button
+        type="button"
+        onClick={handleBookmark}
+        aria-label={saved ? "Remove from saved jobs" : "Save job"}
+        aria-pressed={saved}
+        className={cn(
+          "absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
+          saved
+            ? "border-[#5b4df5]/40 bg-[#5b4df5]/15 text-[#c7c1ff]"
+            : "border-white/[0.07] bg-[#14151b] text-zinc-500 hover:border-white/20 hover:text-white"
+        )}
+      >
+        <Bookmark className={cn("h-4 w-4", saved && "fill-current")} />
+      </button>
     </article>
   )
 }

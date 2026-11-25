@@ -9,7 +9,7 @@ import type {
 import { StatusBadge } from "./status-badge"
 import { StatusSelect } from "./status-select"
 import { updateApplicationStatus } from "@/lib/actions/applications"
-import ManageJobsPage from "../../../page"
+import { toast } from "@/components/ui/toast"
 
 interface ApplicationsTableProps {
   initialApplications: ManagedApplication[]
@@ -59,16 +59,24 @@ export function ApplicationsTable({
       const result = await updateApplicationStatus(applicationId, {
         status: nextStatus,
       })
-      console.log("Updated result:", result)
-      if (result.modifiedCount > 0) {
+
+      if (result?.modifiedCount > 0) {
         setApplications((prev) =>
           prev.map((app) =>
             app._id === applicationId ? { ...app, status: nextStatus } : app
           )
         )
+        toast.add({
+          title: "Status updated",
+          description: `The applicant is now marked as ${nextStatus}.`,
+        })
       }
     } catch (error) {
-      console.error("Failed to update status:", error)
+      toast.add({
+        title: "Could not update status",
+        description:
+          error instanceof Error ? error.message : "Please try again.",
+      })
     }
   }
 
