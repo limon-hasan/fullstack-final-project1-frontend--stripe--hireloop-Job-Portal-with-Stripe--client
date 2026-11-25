@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { toast } from "@/components/ui/toast"
 import {
   DropdownMenu,
@@ -148,6 +149,7 @@ export function DashboardTopbar() {
       </form>
 
       <div className="ml-auto flex items-center gap-2 lg:ml-3">
+        <ThemeToggle className="h-9 w-9 rounded-lg px-0" />
         <Sheet>
           <SheetTrigger
             render={

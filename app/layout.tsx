@@ -65,7 +65,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(fontMono.variable, geist.variable)}
     >
-      <body className="min-h-screen bg-[#08080a] font-sans text-neutral-100 antialiased selection:bg-[#5b4df5]/30 selection:text-white">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased selection:bg-[#5b4df5]/30 selection:text-white">
         <ThemeProvider>
           <Navbar />
           {children}

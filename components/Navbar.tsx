@@ -18,6 +18,7 @@ import {
 import logo from "@/app/images/logo.png"
 
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { toast } from "@/components/ui/toast"
 import {
   DropdownMenu,
@@ -111,6 +112,7 @@ function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className="h-10 w-10 px-0" />
           {session?.user ? (
             <div className="hidden items-center gap-2 lg:flex">
               <Link
