@@ -158,7 +158,7 @@ export default function CheckoutPage({
               </div>
 
               {/* Account Info */}
-              <div className="rounded-xl border border-zinc-800/80 bg-[#1A1C21]/60 p-4">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800/80 dark:bg-[#1A1C21]/60">
                 <span className="text-[11px] font-medium text-zinc-500">
                   Billing Account
                 </span>
