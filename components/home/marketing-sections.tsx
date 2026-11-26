@@ -90,7 +90,7 @@ export function FeaturedJobs({ jobs }: { jobs: ManagedJob[] }) {
   )
 }
 
-export function CategoryShowcase() {
+export function CategoryShowcase({ jobs = [] }: { jobs?: ManagedJob[] }) {
   return (
     <section className="mx-auto w-full max-w-[1240px] px-4 pt-20 sm:px-6">
       <div className="max-w-2xl">
@@ -101,40 +101,65 @@ export function CategoryShowcase() {
           Find the work that fits you
         </h2>
         <p className="mt-2 text-sm text-zinc-400">
-          Six broad tracks, thousands of specific roles. Start where your
-          strengths are.
+          Jump straight into open roles across each discipline and discover
+          teams actively hiring right now.
         </p>
       </div>
 
       <div className="mt-7 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-        {JOB_CATEGORY_SHOWCASE.map(({ name, description, icon: Icon, openings, accent }) => (
-          <Link
-            key={name}
-            href={`/browse-jobs?category=${encodeURIComponent(name)}`}
-            className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0d0e12] p-5 transition-all hover:-translate-y-0.5 hover:border-white/[0.14] hover:bg-[#101116]"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <span
-                className={`flex h-10 w-10 items-center justify-center rounded-xl border ${accent}`}
-              >
-                <Icon className="h-4.5 w-4.5" />
+        {JOB_CATEGORY_SHOWCASE.map(({ name, description, icon: Icon, accent }) => {
+          const isRemoteTrack = name === "Remote & Global"
+          const matchingJobs = isRemoteTrack
+            ? jobs.filter((job) => job.isRemote)
+            : jobs.filter((job) => job.category === name)
+          const href = isRemoteTrack
+            ? "/browse-jobs?isRemote=true"
+            : `/browse-jobs?category=${encodeURIComponent(name)}`
+          const sampleTitles = matchingJobs
+            .slice(0, 2)
+            .map((job) => job.title)
+            .filter(Boolean)
+
+          return (
+            <Link
+              key={name}
+              href={href}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0d0e12] p-5 transition-all hover:-translate-y-0.5 hover:border-white/[0.14] hover:bg-[#101116]"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl border ${accent}`}
+                  >
+                    <Icon className="h-4.5 w-4.5" />
+                  </span>
+                  <span className="rounded-full border border-white/[0.07] bg-[#14151b] px-2.5 py-1 text-[11px] font-medium text-zinc-400">
+                    {matchingJobs.length > 0
+                      ? `${matchingJobs.length} ${matchingJobs.length === 1 ? "open role" : "open roles"}`
+                      : "Explore roles"}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-[15px] font-semibold text-white">
+                  {name}
+                </h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-500">
+                  {description}
+                </p>
+                {sampleTitles.length > 0 ? (
+                  <p className="mt-3 truncate text-[11.5px] font-medium text-zinc-400">
+                    e.g. {sampleTitles.join(" · ")}
+                  </p>
+                ) : null}
+              </div>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-medium text-[#a99fff] transition-colors group-hover:text-white">
+                {matchingJobs.length > 0
+                  ? `View ${matchingJobs.length} ${matchingJobs.length === 1 ? "role" : "roles"}`
+                  : "Browse roles"}
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               </span>
-              <span className="text-[11px] font-medium text-zinc-500">
-                {openings} open
-              </span>
-            </div>
-            <h3 className="mt-4 text-[15px] font-semibold text-white">
-              {name}
-            </h3>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-500">
-              {description}
-            </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-[12px] font-medium text-zinc-400 transition-colors group-hover:text-white">
-              Browse roles
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </span>
-          </Link>
-        ))}
+            </Link>
+          )
+        })}
       </div>
     </section>
   )
@@ -211,11 +236,10 @@ export function BenefitsSplit() {
         {groups.map((group, index) => (
           <div
             key={group.title}
-            className={`relative overflow-hidden rounded-3xl border p-6 sm:p-8 ${
-              index === 0
-                ? "border-[#5b4df5]/25 bg-[linear-gradient(145deg,rgba(91,77,245,0.08),rgba(255,255,255,0.98)_55%)] shadow-sm dark:border-[#5b4df5]/20 dark:bg-[linear-gradient(145deg,rgba(91,77,245,0.14),rgba(12,13,18,0.9)_55%)] dark:shadow-none"
-                : "border-white/[0.07] bg-[#0d0e12]"
-            }`}
+            className={`relative overflow-hidden rounded-3xl border p-6 sm:p-8 ${index === 0
+              ? "border-[#5b4df5]/25 bg-[linear-gradient(145deg,rgba(91,77,245,0.08),rgba(255,255,255,0.98)_55%)] shadow-sm dark:border-[#5b4df5]/20 dark:bg-[linear-gradient(145deg,rgba(91,77,245,0.14),rgba(12,13,18,0.9)_55%)] dark:shadow-none"
+              : "border-white/[0.07] bg-[#0d0e12]"
+              }`}
           >
             <div
               aria-hidden="true"
