@@ -1,6 +1,17 @@
 # HireLoop Client
 
-> **About:** HireLoop is a modern, role-based job board and hiring platform frontend built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Base UI / shadcn**, **Better Auth**, and **Stripe**. It connects job seekers, recruiters, and admins with real-time application tracking, saved jobs, light/dark themes, and Stripe-powered Pro subscriptions.
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
+## About
+
+**HireLoop Client** is the frontend web application for the **HireLoop** job portal and recruitment platform. Built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4**, **Better Auth**, and **Stripe**, it delivers role-based dashboards for job seekers, recruiters, and administrators, real-time application tracking, saved jobs, light/dark themes, and Stripe-powered Pro subscriptions.
 
 ---
 
