@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, Check, Minus, Sparkles } from "lucide-react"
+import { ArrowRight, Building2, Check, Minus, Sparkles, Zap } from "lucide-react"
 
 import { BrandButton } from "@/components/shared/brand-button"
 import { PRICING_FAQ, PRICING_PLANS } from "@/lib/constants/marketing"
@@ -37,25 +37,52 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto w-full max-w-[1240px] px-4 sm:px-6">
-        <div className="grid gap-4 lg:grid-cols-3">
-          {PRICING_PLANS.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col overflow-hidden rounded-3xl border p-6 sm:p-7 ${plan.highlighted
-                  ? "border-[#5b4df5]/45 bg-[linear-gradient(160deg,rgba(91,77,245,0.09),rgba(255,255,255,0.98)_55%)] shadow-[0_24px_60px_-36px_rgba(91,77,245,0.35)] dark:bg-[linear-gradient(160deg,rgba(91,77,245,0.18),rgba(12,13,18,0.95)_55%)] dark:shadow-[0_30px_80px_-40px_rgba(91,77,245,0.8)]"
-                  : "border-white/[0.07] bg-[#0d0e12]"
-                }`}
-            >
-              {plan.highlighted && (
-                <span className="absolute top-5 right-5 rounded-full border border-[#5b4df5]/30 bg-[#eef2ff] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#4f46e5] uppercase dark:border-[#8b81ff]/40 dark:bg-[#5b4df5]/20 dark:text-[#d6d2ff]">
-                  Most popular
-                </span>
-              )}
+        <div className="grid gap-5 lg:grid-cols-3 lg:items-stretch">
+          {PRICING_PLANS.map((plan, index) => {
+            const PlanIcon =
+              index === 0 ? Zap : index === 1 ? Sparkles : Building2
 
-              <h2 className="text-lg font-semibold text-white">{plan.name}</h2>
-              <p className="mt-1.5 text-[13px] text-zinc-400">
-                {plan.description}
-              </p>
+            return (
+              <div
+                key={plan.name}
+                className={`group relative flex flex-col overflow-hidden rounded-3xl border p-6 transition-all duration-200 hover:-translate-y-1 sm:p-7 ${
+                  plan.highlighted
+                    ? "border-[#5b4df5]/50 bg-[linear-gradient(160deg,rgba(91,77,245,0.10),rgba(255,255,255,0.99)_55%)] shadow-[0_24px_60px_-30px_rgba(91,77,245,0.35)] ring-1 ring-[#5b4df5]/20 hover:shadow-[0_28px_70px_-28px_rgba(91,77,245,0.45)] dark:bg-[linear-gradient(160deg,rgba(91,77,245,0.18),rgba(12,13,18,0.95)_55%)] dark:shadow-[0_30px_80px_-40px_rgba(91,77,245,0.8)]"
+                    : "border-white/[0.07] bg-[#0d0e12] shadow-sm hover:border-slate-300 hover:shadow-md dark:hover:border-white/[0.15]"
+                }`}
+              >
+                {plan.highlighted ? (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#5b4df5,#8b81ff,#5b4df5)]"
+                  />
+                ) : null}
+
+                <div className="flex items-center justify-between gap-3">
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl border ${
+                      plan.highlighted
+                        ? "border-[#5b4df5]/30 bg-[#eef2ff] text-[#4f46e5] dark:border-[#8b81ff]/40 dark:bg-[#5b4df5]/20 dark:text-[#d6d2ff]"
+                        : "border-slate-200 bg-slate-50 text-slate-600 dark:border-white/[0.08] dark:bg-[#14151b] dark:text-zinc-300"
+                    }`}
+                  >
+                    <PlanIcon className="h-4.5 w-4.5" />
+                  </span>
+
+                  {plan.highlighted && (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-[#5b4df5]/30 bg-[#eef2ff] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#4f46e5] uppercase dark:border-[#8b81ff]/40 dark:bg-[#5b4df5]/20 dark:text-[#d6d2ff]">
+                      <Sparkles className="h-3 w-3" />
+                      Most popular
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="mt-5 text-lg font-semibold text-white">
+                  {plan.name}
+                </h2>
+                <p className="mt-1.5 text-[13px] text-zinc-400">
+                  {plan.description}
+                </p>
 
               <div className="mt-6 flex items-end gap-1.5">
                 <span className="text-4xl font-semibold tracking-tight text-white">
@@ -100,13 +127,14 @@ export default function PricingPage() {
               ) : (
                 <Link
                   href={plan.href}
-                  className="mt-7 inline-flex h-11 w-full items-center justify-center rounded-xl border border-white/[0.1] bg-white/[0.03] text-sm font-medium text-zinc-200 transition-colors hover:border-white/25 hover:text-white"
+                  className="mt-7 inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-sm font-medium text-slate-900 transition-colors hover:border-slate-300 hover:bg-slate-200/70 dark:border-white/[0.1] dark:bg-white/[0.03] dark:text-zinc-200 dark:hover:border-white/25 dark:hover:text-white"
                 >
                   {plan.cta}
                 </Link>
               )}
             </div>
-          ))}
+            )
+          })}
         </div>
 
         <p className="mt-5 flex items-center justify-center gap-2 text-xs text-zinc-500">
