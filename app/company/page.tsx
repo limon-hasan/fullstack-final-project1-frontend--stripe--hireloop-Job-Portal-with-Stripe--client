@@ -34,7 +34,7 @@ export default function CompanyPage() {
 
           <h1 className="mt-6 text-4xl font-semibold tracking-[-0.03em] text-balance text-white sm:text-5xl lg:text-[56px]">
             Hiring should feel
-            <span className="bg-[linear-gradient(100deg,#ffffff_10%,#cfcaff_55%,#8b81ff_95%)] bg-clip-text text-transparent">
+            <span className="bg-[linear-gradient(100deg,#1e1b4b_10%,#5b4df5_52%,#7c3aed_92%)] bg-clip-text text-transparent dark:bg-[linear-gradient(100deg,#ffffff_10%,#cfcaff_55%,#8b81ff_95%)]">
               {" "}
               human again
             </span>
