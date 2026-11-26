@@ -18,7 +18,7 @@ import {
 
 import globeImg from "@/app/images/globe.png"
 import { BrandButton } from "@/components/shared/brand-button"
-import { HOME_STATS } from "@/lib/constants/marketing"
+import type { ManagedJob } from "@/types/jobs"
 
 const trendingTags = [
   { label: "Product Designer", query: "Product Designer" },
@@ -39,10 +39,70 @@ const starField = {
   backgroundSize: "260px 260px, 340px 340px, 300px 300px, 220px 220px",
 }
 
-export function Hero() {
+export function Hero({ jobs = [] }: { jobs?: ManagedJob[] }) {
   const router = useRouter()
   const [role, setRole] = React.useState("")
   const [location, setLocation] = React.useState("")
+  const [liveIndex, setLiveIndex] = React.useState(0)
+
+  const liveUpdates = React.useMemo(() => {
+    const items: Array<{ label: string; highlight: string; href: string }> =
+      jobs.slice(0, 6).map((job) => ({
+        label: `Live role · ${job.title}`,
+        highlight: `${job.companyName} · ${job.isRemote ? "Remote" : job.location || "On-site"}`,
+        href: `/browse-jobs/${job._id}`,
+      }))
+
+    if (items.length === 0) {
+      items.push({
+        label: "Live board active",
+        highlight: "Verified employers hiring across 48 countries",
+        href: "/browse-jobs",
+      })
+    }
+    return items
+  }, [jobs])
+
+  React.useEffect(() => {
+    if (liveUpdates.length <= 1) return
+    const timer = window.setInterval(() => {
+      setLiveIndex((prev) => (prev + 1) % liveUpdates.length)
+    }, 3500)
+    return () => window.clearInterval(timer)
+  }, [liveUpdates.length])
+
+  const activeUpdate = liveUpdates[liveIndex % liveUpdates.length]
+
+  const liveStats = React.useMemo(() => {
+    const activeJobsCount = jobs.filter((j) => j.status !== "Expired").length
+    const companiesCount = new Set(
+      jobs.map((j) => j.companyName).filter(Boolean)
+    ).size
+    const remoteCount = jobs.filter((j) => j.isRemote).length
+    const totalApplicants = jobs.reduce(
+      (sum, j) => sum + (j.applicantsCount || 0),
+      0
+    )
+
+    return [
+      {
+        label: "Live open roles",
+        value: activeJobsCount > 0 ? activeJobsCount : "50K+",
+      },
+      {
+        label: "Hiring teams",
+        value: companiesCount > 0 ? companiesCount : "12K+",
+      },
+      {
+        label: "Remote roles",
+        value: remoteCount > 0 ? remoteCount : "2M+",
+      },
+      {
+        label: "Active applicants",
+        value: totalApplicants > 0 ? totalApplicants : "97%",
+      },
+    ]
+  }, [jobs])
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault()
@@ -70,13 +130,23 @@ export function Hero() {
 
       <div className="relative mx-auto flex max-w-[1240px] flex-col items-center px-4 text-center sm:px-6">
         <div className="mb-7 flex flex-wrap items-center justify-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-[#12131a]/80 px-3.5 py-1.5 text-[11px] font-medium tracking-wide text-zinc-300 backdrop-blur">
-            <span className="hireloop-pulse h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            <span className="text-white">50,000+</span> new roles this month
-          </span>
+          <Link
+            href={activeUpdate.href}
+            className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-[#12131a]/80 px-3.5 py-1.5 text-[11px] font-medium tracking-wide text-zinc-300 backdrop-blur transition-colors hover:border-[#5b4df5]/40"
+          >
+            <span className="hireloop-pulse h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+            <span className="font-semibold text-white">
+              {activeUpdate.label}
+            </span>
+            <span className="hidden text-zinc-500 sm:inline">•</span>
+            <span className="hidden max-w-[220px] truncate text-zinc-400 sm:inline">
+              {activeUpdate.highlight}
+            </span>
+            <ArrowRight className="h-3 w-3 shrink-0 text-[#a99fff]" />
+          </Link>
           <span className="hidden items-center gap-1.5 rounded-full border border-[#5b4df5]/30 bg-[#5b4df5]/10 px-3 py-1.5 text-[11px] font-medium text-[#b7afff] backdrop-blur sm:inline-flex">
             <Sparkles className="h-3 w-3" />
-            Curated, never scraped
+            Real-time job feed
           </span>
         </div>
 
@@ -151,7 +221,7 @@ export function Hero() {
         </div>
 
         <div className="mt-12 grid w-full max-w-4xl grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-          {HOME_STATS.map((stat, index) => {
+          {liveStats.map((stat, index) => {
             const Icon = statIcons[index] ?? Star
             return (
               <div

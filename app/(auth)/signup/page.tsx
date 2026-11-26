@@ -171,7 +171,7 @@ export default function SignUpPage() {
 
       <AuthError message={errorMessage} />
 
-      <div className="mb-6 grid grid-cols-2 gap-1.5 rounded-xl border border-white/10 bg-[#16161a] p-1.5">
+      <div className="mb-6 grid grid-cols-2 gap-1.5 rounded-xl border border-slate-200 bg-slate-100 p-1.5 dark:border-white/10 dark:bg-[#16161a]">
         {roles.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
@@ -181,7 +181,7 @@ export default function SignUpPage() {
             className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-semibold transition-all ${
               formData.role === id
                 ? "bg-[#5b4df5] text-white shadow-md"
-                : "text-neutral-400 hover:text-white"
+                : "text-slate-600 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white"
             } disabled:cursor-not-allowed disabled:opacity-50`}
           >
             <Icon className="size-3.5" />

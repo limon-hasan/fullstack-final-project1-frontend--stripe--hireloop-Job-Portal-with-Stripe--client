@@ -28,18 +28,21 @@ export function AuthInput({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <label htmlFor={id} className="text-xs font-medium text-neutral-300">
+        <label
+          htmlFor={id}
+          className="text-xs font-medium text-slate-700 dark:text-neutral-300"
+        >
           {label}
         </label>
         {action}
       </div>
       <div className="relative flex items-center">
-        <Icon className="absolute left-3.5 size-4 text-neutral-500" />
+        <Icon className="absolute left-3.5 size-4 text-slate-400 dark:text-neutral-500" />
         <input
           id={id}
           type={inputType}
           className={cn(
-            "h-11 w-full rounded-xl border border-white/10 bg-[#16161a] text-sm text-white placeholder-neutral-500 transition-colors outline-none focus:border-[#5b4df5] focus:ring-1 focus:ring-[#5b4df5] disabled:opacity-50",
+            "h-11 w-full rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 placeholder-slate-400 transition-colors outline-none focus:border-[#5b4df5] focus:bg-white focus:ring-1 focus:ring-[#5b4df5] disabled:opacity-50 dark:border-white/10 dark:bg-[#16161a] dark:text-white dark:placeholder-neutral-500 dark:focus:bg-[#16161a]",
             revealable ? "pr-10 pl-10" : "pr-4 pl-10",
             className
           )}

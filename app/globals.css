@@ -247,6 +247,7 @@ html:not(.dark) .bg-\[\#0e0e13\]\/85 {
 html:not(.dark) .bg-\[\#101116\],
 html:not(.dark) .bg-\[\#111218\],
 html:not(.dark) .bg-\[\#121215\],
+html:not(.dark) .bg-\[\#121215\]\/85,
 html:not(.dark) .bg-\[\#121318\],
 html:not(.dark) .bg-\[\#12131a\],
 html:not(.dark) .bg-\[\#12131a\]\/80,
@@ -283,15 +284,18 @@ html:not(.dark) .text-zinc-200:not(.keep-dark *) {
   color: #0f172a !important;
 }
 
+html:not(.dark) .text-neutral-200:not(.keep-dark *),
 html:not(.dark) .text-neutral-300:not(.keep-dark *),
 html:not(.dark) .text-zinc-300:not(.keep-dark *) {
   color: #334155 !important;
 }
 
+html:not(.dark) .text-neutral-400:not(.keep-dark *),
 html:not(.dark) .text-zinc-400:not(.keep-dark *) {
   color: #475569 !important;
 }
 
+html:not(.dark) .text-neutral-500:not(.keep-dark *),
 html:not(.dark) .text-zinc-500:not(.keep-dark *),
 html:not(.dark) .text-zinc-600:not(.keep-dark *),
 html:not(.dark) .text-zinc-700:not(.keep-dark *) {
@@ -336,6 +340,7 @@ html:not(.dark) .divide-zinc-800\/80 > :not(:last-child) {
 }
 
 /* Placeholders & hover states */
+html:not(.dark) .placeholder-neutral-500::placeholder,
 html:not(.dark) .placeholder-zinc-500::placeholder,
 html:not(.dark) .placeholder-zinc-600::placeholder {
   color: #94a3b8 !important;

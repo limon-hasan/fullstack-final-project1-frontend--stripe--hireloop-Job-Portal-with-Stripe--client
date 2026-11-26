@@ -16,10 +16,10 @@ export default async function Page() {
   return (
     <div className="flex min-h-svh flex-col bg-[#08080a]">
       <main className="flex-1">
-        <Hero />
+        <Hero jobs={jobs} />
         <TrustedBy />
         <FeaturedJobs jobs={jobs} />
-        <CategoryShowcase />
+        <CategoryShowcase jobs={jobs} />
         <HowItWorks />
         <BenefitsSplit />
         <Testimonials />

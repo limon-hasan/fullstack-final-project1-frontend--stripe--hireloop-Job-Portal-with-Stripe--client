@@ -21,7 +21,7 @@ export function AuthLayout({
 
       <div
         className={cn(
-          "relative z-10 w-full rounded-2xl border border-white/10 bg-[#121215]/85 p-6 shadow-2xl backdrop-blur-2xl sm:p-8",
+          "relative z-10 w-full rounded-2xl border border-slate-200 bg-white/95 p-6 shadow-xl backdrop-blur-2xl sm:p-8 dark:border-white/10 dark:bg-[#121215]/85 dark:shadow-2xl",
           maxWidth
         )}
       >
