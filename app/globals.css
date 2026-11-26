@@ -302,6 +302,7 @@ html:not(.dark) .text-zinc-700:not(.keep-dark *) {
   color: #64748b !important;
 }
 
+html:not(.dark) .text-\[\#d6d2ff\]:not(.keep-dark *),
 html:not(.dark) .text-\[\#c7c1ff\]:not(.keep-dark *),
 html:not(.dark) .text-\[\#b7afff\]:not(.keep-dark *),
 html:not(.dark) .text-\[\#a99fff\]:not(.keep-dark *),

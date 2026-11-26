@@ -47,7 +47,7 @@ export default function PricingPage() {
                 }`}
             >
               {plan.highlighted && (
-                <span className="absolute top-5 right-5 rounded-full border border-[#8b81ff]/40 bg-[#5b4df5]/20 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#d6d2ff] uppercase">
+                <span className="absolute top-5 right-5 rounded-full border border-[#5b4df5]/30 bg-[#eef2ff] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#4f46e5] uppercase dark:border-[#8b81ff]/40 dark:bg-[#5b4df5]/20 dark:text-[#d6d2ff]">
                   Most popular
                 </span>
               )}
@@ -75,10 +75,11 @@ export default function PricingPage() {
                     className="flex items-start gap-2.5 text-[13px] text-zinc-300"
                   >
                     <span
-                      className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border ${plan.highlighted
-                          ? "border-[#8b81ff]/40 bg-[#5b4df5]/20 text-[#d6d2ff]"
+                      className={`mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border ${
+                        plan.highlighted
+                          ? "border-[#5b4df5]/30 bg-[#eef2ff] text-[#4f46e5] dark:border-[#8b81ff]/40 dark:bg-[#5b4df5]/20 dark:text-[#d6d2ff]"
                           : "border-emerald-500/25 bg-emerald-500/10 text-emerald-300"
-                        }`}
+                      }`}
                     >
                       <Check className="h-3 w-3" />
                     </span>
